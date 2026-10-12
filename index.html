@@ -1,1 +1,231 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#100e18">
+  <meta name="description" content="JanJingJing Myanmar Fanclub — Fan updates, events and community news.">
+  <title>JanJingJing Myanmar Fanclub</title>
+  <style>
+    :root {
+      --bg: #100e18;
+      --panel: #1c1927;
+      --text: #f8f5ff;
+      --muted: #b8b0c8;
+      --accent: #c4a0ff;
+      --line: #373044;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1080px, 90%);
+      margin: auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      padding: 20px 0;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      padding: 90px 0 75px;
+      text-align: center;
+      background: radial-gradient(ellipse at top, #332348 0%, var(--bg) 65%);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: clamp(34px, 7vw, 64px);
+      line-height: 1.12;
+      margin: 20px 0;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 570px;
+      margin: 0 auto 28px;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--accent);
+      color: #171020;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    section { padding: 55px 0; }
+
+    .section-label {
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h2 { font-size: 28px; margin: 8px 0 22px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .card .number {
+      color: var(--accent);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .card p, .about p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .about {
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    footer {
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 650px) {
+      .hero { padding: 65px 0 55px; }
+      .grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 12px; font-size: 12px; }
+      h2 { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <a class="logo" href="#">JJ <span>MYANMAR</span></a>
+      <div class="nav-links">
+        <a href="#updates">Updates</a>
+        <a href="#events">Events</a>
+        <a href="#about">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="eyebrow">Official Fan Community</div>
+        <h1>JanJingJing<br>Myanmar Fanclub</h1>
+        <p>
+          A community made with love.
+          Stay connected with fan updates, event information
+          and special moments from our community.
+        </p>
+        <a class="button" href="#updates">Explore Updates ↗</a>
+      </div>
+    </section>
+
+    <section id="updates">
+      <div class="container">
+        <div class="section-label">Stay Connected</div>
+        <h2>Latest Updates</h2>
+        <div class="grid">
+          <article class="card">
+            <div class="number">01 / NEWS</div>
+            <h3>Fan Updates</h3>
+            <p>Discover the latest news and announcements.
+              Verified updates will be added here.</p>
+          </article>
+          <article class="card" id="events">
+            <div class="number">02 / EVENTS</div>
+            <h3>Events & Activities</h3>
+            <p>Find event announcements, schedules
+              and important fan community information.</p>
+          </article>
+          <article class="card">
+            <div class="number">03 / COMMUNITY</div>
+            <h3>Our Community</h3>
+            <p>A place to connect, share updates
+              and celebrate our shared enthusiasm.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="container">
+        <div class="section-label">Who We Are</div>
+        <h2>About Our Fanclub</h2>
+        <p>
+          JanJingJing Myanmar Fanclub is a fan community
+          dedicated to sharing updates and supporting
+          our fandom. This website is a fan-made community
+          project and is not an official artist website.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 JanJingJing Myanmar Fanclub · Made with care by fans.
+    </div>
+  </footer>
+</body>
+</html>
+
