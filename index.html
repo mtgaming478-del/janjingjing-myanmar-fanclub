@@ -41,6 +41,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    body.lightbox-open {
+      overflow: hidden;
+    }
+
     img {
       display: block;
       max-width: 100%;
@@ -109,10 +113,16 @@
     .hero {
       padding: 76px 0 64px;
       background:
-        radial-gradient(ellipse at 15% 10%,
-          rgba(220, 204, 251, 0.13), transparent 48%),
-        radial-gradient(ellipse at 90% 85%,
-          rgba(248, 220, 232, 0.08), transparent 42%);
+        radial-gradient(
+          ellipse at 15% 10%,
+          rgba(220, 204, 251, 0.13),
+          transparent 48%
+        ),
+        radial-gradient(
+          ellipse at 90% 85%,
+          rgba(248, 220, 232, 0.08),
+          transparent 42%
+        );
     }
 
     .hero-grid {
@@ -204,7 +214,10 @@
       position: absolute;
       inset: auto 0 0;
       padding: 44px 20px 18px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.8)
+      );
       color: white;
       font-size: 12px;
       letter-spacing: 1px;
@@ -267,7 +280,7 @@
     }
 
     .events-section {
-      background: rgba(255,255,255,0.015);
+      background: rgba(255, 255, 255, 0.015);
     }
 
     .event-card {
@@ -282,86 +295,185 @@
       display: inline-block;
       padding: 5px 10px;
       border-radius: 999px;
-      background: rgba(220,204,251,0.1);
+      background: rgba(220, 204, 251, 0.1);
       color: var(--lavender);
       font-size: 11px;
       font-weight: 700;
     }
 
+    /* Professional Gallery Grid */
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  align-items: stretch;
-}
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
 
-.gallery-item {
-  position: relative;
-  overflow: hidden;
-  min-width: 0;
-  aspect-ratio: 4 / 5;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--surface);
-  isolation: isolate;
-}
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      aspect-ratio: 4 / 5;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      isolation: isolate;
+      cursor: zoom-in;
+      outline: none;
+    }
 
-.gallery-item.wide {
-  grid-column: span 2;
-  aspect-ratio: 5 / 3;
-}
+    .gallery-item.wide {
+      grid-column: span 2;
+      aspect-ratio: 5 / 3;
+    }
 
-.gallery-item img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
 
-.gallery-item:hover img {
-  transform: scale(1.04);
-}
+    .gallery-item:hover img,
+    .gallery-item:focus-visible img {
+      transform: scale(1.04);
+    }
 
-.gallery-caption {
-  position: absolute;
-  inset: auto 0 0;
-  padding: 36px 16px 16px;
-  background: linear-gradient(
-    transparent,
-    rgba(12, 10, 18, 0.88)
-  );
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-}
+    .gallery-item:focus-visible {
+      outline: 2px solid var(--lavender);
+      outline-offset: 4px;
+    }
 
-@media (max-width: 650px) {
-  .gallery-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
+    .gallery-caption {
+      position: absolute;
+      inset: auto 0 0;
+      padding: 36px 16px 16px;
+      background: linear-gradient(
+        transparent,
+        rgba(12, 10, 18, 0.88)
+      );
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      pointer-events: none;
+    }
 
-  .gallery-item,
-  .gallery-item.wide {
-    grid-column: span 1;
-    aspect-ratio: 4 / 5;
-    border-radius: 12px;
-  }
+    /* Gallery Lightbox */
 
-  .gallery-caption {
-    padding: 28px 10px 12px;
-    font-size: 12px;
-  }
-}
-    
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 76px 42px;
+      background: rgba(8, 7, 11, 0.96);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.22s ease,
+                  visibility 0.22s ease;
+    }
+
+    .lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .lightbox-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .lightbox-content img {
+      width: auto;
+      height: auto;
+      max-width: min(100%, 1100px);
+      max-height: calc(100vh - 160px);
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .lightbox-content figcaption {
+      color: var(--white);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .lightbox-counter {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .lightbox button {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      background: rgba(35, 31, 43, 0.86);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease,
+                  transform 0.2s ease;
+    }
+
+    .lightbox button:hover {
+      background: rgba(220, 204, 251, 0.22);
+      transform: scale(1.05);
+    }
+
+    .lightbox button:focus-visible {
+      outline: 2px solid var(--lavender);
+      outline-offset: 3px;
+    }
+
+    .lightbox-close {
+      top: 18px;
+      right: 20px;
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .lightbox-prev,
+    .lightbox-next {
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+    }
+
+    .lightbox-prev:hover,
+    .lightbox-next:hover {
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .lightbox-prev {
+      left: 18px;
+    }
+
+    .lightbox-next {
+      right: 18px;
+    }
 
     .social-section {
       background: linear-gradient(
         135deg,
-        rgba(220,204,251,0.07),
-        rgba(248,220,232,0.035)
+        rgba(220, 204, 251, 0.07),
+        rgba(248, 220, 232, 0.035)
       );
     }
 
@@ -417,6 +529,8 @@
       font-size: 12px;
     }
 
+    /* Responsive Layout */
+
     @media (max-width: 760px) {
       .container {
         width: min(100% - 32px, var(--width));
@@ -428,6 +542,10 @@
         align-items: flex-start;
         flex-direction: column;
         gap: 13px;
+      }
+
+      .brand {
+        white-space: normal;
       }
 
       .nav-links {
@@ -488,12 +606,13 @@
       .gallery-item,
       .gallery-item.wide {
         grid-column: span 1;
+        aspect-ratio: 4 / 5;
+        border-radius: 12px;
       }
 
-      .gallery-item img,
-      .gallery-item.wide img {
-        min-height: 190px;
-        aspect-ratio: 3 / 4;
+      .gallery-caption {
+        padding: 28px 10px 12px;
+        font-size: 12px;
       }
 
       .social-grid {
@@ -503,6 +622,52 @@
       .footer-inner {
         align-items: flex-start;
         flex-direction: column;
+      }
+
+      .lightbox {
+        padding: 64px 48px 34px;
+      }
+
+      .lightbox-content img {
+        max-width: 100%;
+        max-height: calc(100vh - 150px);
+      }
+
+      .lightbox button {
+        width: 40px;
+        height: 40px;
+      }
+
+      .lightbox-close {
+        top: 12px;
+        right: 12px;
+      }
+
+      .lightbox-prev {
+        left: 6px;
+      }
+
+      .lightbox-next {
+        right: 6px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .lightbox {
+        padding-inline: 42px;
+      }
+
+      .lightbox-prev {
+        left: 3px;
+      }
+
+      .lightbox-next {
+        right: 3px;
+      }
+
+      .lightbox button {
+        width: 36px;
+        height: 36px;
       }
     }
 
@@ -522,9 +687,10 @@
 
 <body>
   <header class="site-header">
-    <nav class="nav container" aria-label="Main navigation">      
-     <a class="brand" href="#home">JanJingJing Myanmar Fanclub</a>
-      
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="#home">
+        JanJingJing Myanmar Fanclub
+      </a>
 
       <div class="nav-links">
         <a href="#home">Home</a>
@@ -537,6 +703,7 @@
   </header>
 
   <main>
+    <!-- Hero Section -->
     <section class="hero" id="home">
       <div class="hero-grid container">
         <div>
@@ -558,6 +725,7 @@
             <a class="button button-primary" href="#updates">
               Explore Updates ↗
             </a>
+
             <a class="button button-secondary" href="#gallery">
               View Gallery
             </a>
@@ -570,6 +738,7 @@
             alt="JanJingJing together"
             fetchpriority="high"
           >
+
           <div class="photo-caption">
             JANJINGJING · MOMENTS WE CHERISH
           </div>
@@ -577,12 +746,14 @@
       </div>
     </section>
 
+    <!-- News Section -->
     <section class="content-section" id="updates">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="section-label">Stay Connected</p>
-            <h2>Latest News & Updates</h2>
+            <h2>Latest News &amp; Updates</h2>
+
             <p class="section-description">
               A home for fan updates, announcements and
               memorable moments. Verified news will be
@@ -623,12 +794,14 @@
       </div>
     </section>
 
+    <!-- Events Section -->
     <section class="content-section events-section" id="events">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="section-label">Mark Your Calendar</p>
-            <h2>Events & Activities</h2>
+            <h2>Events &amp; Activities</h2>
+
             <p class="section-description">
               Follow event announcements, schedules
               and fan activities. Dates and venues will
@@ -668,135 +841,87 @@
       </div>
     </section>
 
+    <!-- Photo Gallery Section -->
     <section class="content-section" id="gallery">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="section-label">Through Our Lens</p>
             <h2>Photo Gallery</h2>
+
             <p class="section-description">
               A curated collection of Janhae, Jing Jing Yu
-              and JanJingJing moments.
+              and JanJingJing moments. Select any photo
+              to open the gallery viewer.
             </p>
           </div>
         </div>
 
         <div class="gallery-grid">
-          <figure class="gallery-item wide">
+          <figure
+            class="gallery-item wide"
+            tabindex="0"
+            role="button"
+            aria-label="Open JanJingJing photo"
+          >
             <img
               src="images/couple.jpg"
               alt="JanJingJing couple photograph"
               loading="lazy"
             >
+
             <figcaption class="gallery-caption">
               JanJingJing
             </figcaption>
           </figure>
 
-          <figure class="gallery-item wide">
+          <figure
+            class="gallery-item wide"
+            tabindex="0"
+            role="button"
+            aria-label="Open Behind the Moments photo"
+          >
             <img
               src="images/back-view.jpg"
               alt="JanJingJing viewed from behind"
               loading="lazy"
             >
+
             <figcaption class="gallery-caption">
               Behind the Moments
             </figcaption>
           </figure>
 
-          <figure class="gallery-item">
+          <figure
+            class="gallery-item"
+            tabindex="0"
+            role="button"
+            aria-label="Open Jing Jing Yu portrait"
+          >
             <img
               src="images/jingjing-portrait.jpg"
               alt="Jing Jing Yu portrait"
               loading="lazy"
             >
+
             <figcaption class="gallery-caption">
               Jing Jing Yu
             </figcaption>
           </figure>
 
-          <figure class="gallery-item">
+          <figure
+            class="gallery-item"
+            tabindex="0"
+            role="button"
+            aria-label="Open Janhae portrait"
+          >
             <img
               src="images/janhae-portrait.jpg"
               alt="Janhae portrait"
               loading="lazy"
             >
+
             <figcaption class="gallery-caption">
               Janhae
             </figcaption>
-          </figure>
-
-          <figure class="gallery-item wide">
-            <img
-              src="images/family-jewel.jpg"
-              alt="JanJingJing and Jewel family moment"
-              loading="lazy"
-            >
-            <figcaption class="gallery-caption">
-              Family Moments
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section social-section" id="social">
-      <div class="container">
-        <p class="section-label">Find Our Community</p>
-        <h2>Stay Connected</h2>
-
-        <p class="section-description">
-          Follow JanJingJing Myanmar Fanclub through
-          our community's social media channels.
-        </p>
-
-        <div class="social-grid">
-          <div class="social-card">
-            <strong>Facebook</strong>
-            <span>Fan updates & community news</span>
-          </div>
-
-          <div class="social-card">
-            <strong>X</strong>
-            <span>News & fan support</span>
-          </div>
-
-          <div class="social-card">
-            <strong>Instagram</strong>
-            <span>Photos & memorable moments</span>
-          </div>
-
-          <div class="social-card">
-            <strong>TikTok</strong>
-            <span>Fan edits & video content</span>
-          </div>
-        </div>
-
-        <p class="social-note">
-          Official social media links will be added
-          after the fanclub URLs are confirmed.
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <a class="brand" href="#home">JJ <span>MYANMAR</span></a>
-
-      <p>
-        © <span id="year">2026</span>
-        JanJingJing Myanmar Fanclub.
-        Made with care by fans.
-      </p>
-
-      <a href="#home">Back to top ↑</a>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-  </script>
-</body>
-</html>
+          </figure
