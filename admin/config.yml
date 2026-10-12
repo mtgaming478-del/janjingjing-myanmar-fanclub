@@ -4,7 +4,6 @@ backend:
   branch: main
 
 site_url: https://janjingjing-myanmar-fanclub.wasmer.app
-publish_mode: editorial_workflow
 
 media_folder: images/uploads
 public_folder: /images/uploads
