@@ -360,6 +360,53 @@
       pointer-events: none;
     }
 
+    .gallery-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 22px;
+    }
+
+    .gallery-filter {
+      min-height: 38px;
+      padding: 8px 15px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .gallery-filter:hover,
+    .gallery-filter:focus-visible,
+    .gallery-filter.is-active {
+      background: var(--lavender);
+      border-color: var(--lavender);
+      color: #21172D;
+    }
+
+    .gallery-filter:focus-visible {
+      outline: 2px solid var(--pink);
+      outline-offset: 3px;
+    }
+
+    .gallery-empty {
+      display: none;
+      padding: 24px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .gallery-empty.is-visible {
+      display: block;
+    }
+
     /* Gallery Lightbox */
 
     .lightbox {
@@ -857,9 +904,18 @@
           </div>
         </div>
 
+        <div class="gallery-filters" role="group" aria-label="Filter gallery by category">
+          <button class="gallery-filter is-active" type="button" data-gallery-filter="all" aria-pressed="true">All Photos</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="official" aria-pressed="false">Official Photos</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="events" aria-pressed="false">Events</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="fanclub" aria-pressed="false">Fanclub Projects</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="media" aria-pressed="false">Media &amp; Behind the Scenes</button>
+        </div>
+
         <div class="gallery-grid">
           <figure
             class="gallery-item wide"
+            data-category="official"
             tabindex="0"
             role="button"
             aria-label="Open JanJingJing photo"
@@ -877,6 +933,7 @@
 
           <figure
             class="gallery-item wide"
+            data-category="media"
             tabindex="0"
             role="button"
             aria-label="Open Behind the Moments photo"
@@ -894,6 +951,7 @@
 
           <figure
             class="gallery-item"
+            data-category="official"
             tabindex="0"
             role="button"
             aria-label="Open Jing Jing Yu portrait"
@@ -911,6 +969,7 @@
 
           <figure
             class="gallery-item"
+            data-category="official"
             tabindex="0"
             role="button"
             aria-label="Open Janhae portrait"
@@ -924,8 +983,30 @@
             <figcaption class="gallery-caption">
               Janhae
             </figcaption>
-          </figure
+          </figure>
+
+          <figure
+            class="gallery-item"
+            data-category="fanclub"
+            tabindex="0"
+            role="button"
+            aria-label="Open Family Jewel photo"
+          >
+            <img
+              src="images/family-jewel.jpg"
+              alt="Family Jewel photograph"
+              loading="lazy"
             >
+
+            <figcaption class="gallery-caption">
+              Family Jewel
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="gallery-empty" id="gallery-empty" role="status">
+          No photos are available in this category yet.
+        </p>
       </div>
     </section>
 
@@ -994,7 +1075,7 @@
 
   <script>
     (() => {
-      const galleryItems = Array.from(document.querySelectorAll(".gallery-item"));
+      let galleryItems = Array.from(document.querySelectorAll(".gallery-item"));
       const lightbox = document.getElementById("gallery-lightbox");
       const lightboxImage = document.getElementById("lightbox-image");
       const lightboxCaption = document.getElementById("lightbox-caption");
@@ -1002,6 +1083,9 @@
       const closeButton = document.getElementById("lightbox-close");
       const prevButton = document.getElementById("lightbox-prev");
       const nextButton = document.getElementById("lightbox-next");
+      const filterButtons = Array.from(document.querySelectorAll("[data-gallery-filter]"));
+      const galleryEmpty = document.getElementById("gallery-empty");
+      const allGalleryItems = galleryItems.slice();
 
       if (!lightbox || !lightboxImage || !closeButton || !prevButton || !nextButton || galleryItems.length === 0) {
         return;
@@ -1043,13 +1127,36 @@
         }
       }
 
-      galleryItems.forEach((item, index) => {
-        item.addEventListener("click", () => openLightbox(index));
+      allGalleryItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          const visibleIndex = galleryItems.indexOf(item);
+          if (visibleIndex !== -1) openLightbox(visibleIndex);
+        });
         item.addEventListener("keydown", (event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            openLightbox(index);
+            const visibleIndex = galleryItems.indexOf(item);
+            if (visibleIndex !== -1) openLightbox(visibleIndex);
           }
+        });
+      });
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const category = button.dataset.galleryFilter;
+          filterButtons.forEach((filterButton) => {
+            const isActive = filterButton === button;
+            filterButton.classList.toggle("is-active", isActive);
+            filterButton.setAttribute("aria-pressed", String(isActive));
+          });
+
+          allGalleryItems.forEach((item) => {
+            const matches = category === "all" || item.dataset.category === category;
+            item.hidden = !matches;
+          });
+
+          galleryItems = allGalleryItems.filter((item) => !item.hidden);
+          if (galleryEmpty) galleryEmpty.classList.toggle("is-visible", galleryItems.length === 0);
         });
       });
 
