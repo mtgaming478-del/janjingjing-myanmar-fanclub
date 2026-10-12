@@ -1190,13 +1190,12 @@
       const CMS_BRANCH = "main";
 
       function parseMarkdownEntry(markdown) {
-        const match = markdown.match(/^---\\s*\\n([\\s\\S]*?)\\n---\\s*\\n?([\\s\\S]*)$/);
+        const match = markdown.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
         if (!match) return {};
         const fields = {};
         let currentKey = "";
-        let bodyLines = [];
-        match[1].split(/\\r?\\n/).forEach((line) => {
-          const fieldMatch = line.match(/^([a-zA-Z0-9_-]+):\\s*(.*)$/);
+        match[1].split(/\r?\n/).forEach((line) => {
+          const fieldMatch = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
           if (fieldMatch) {
             currentKey = fieldMatch[1];
             let value = fieldMatch[2].trim();
@@ -1211,9 +1210,9 @@
       }
 
       function plainText(value) {
-        return String(value || "").replace(/!\\[([^\\]]*)\\]\\([^)]*\\)/g, "$1")
-          .replace(/\\[([^\\]]+)\\]\\([^)]*\\)/g, "$1")
-          .replace(/[#>*_\\x60~-]/g, "").replace(/\\s+/g, " ").trim();
+        return String(value || "").replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+          .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+          .replace(/[#>*_\x60~-]/g, "").replace(/\s+/g, " ").trim();
       }
 
       function makeElement(tag, className, text) {
@@ -1236,7 +1235,7 @@
         if (!response.ok) throw new Error("Unable to load " + collection + " entries");
         const files = await response.json();
         if (!Array.isArray(files)) return [];
-        const markdownFiles = files.filter((file) => file.type === "file" && /\\.md$/i.test(file.name));
+        const markdownFiles = files.filter((file) => file.type === "file" && /\.md$/i.test(file.name));
         return Promise.all(markdownFiles.map(async (file) => {
           const result = await fetch(file.download_url);
           if (!result.ok) return null;
@@ -1256,7 +1255,7 @@
           if (summary) card.append(makeElement("p", "", summary.length > 240 ? summary.slice(0, 237) + "..." : summary));
           const date = entryDate(entry.date);
           if (date) card.append(makeElement("p", "section-label", date));
-          if (entry.source_url && /^https?:\\/\\//i.test(entry.source_url)) {
+          if (entry.source_url && /^https?:\/\//i.test(entry.source_url)) {
             const link = makeElement("a", "button button-secondary", "Original Source ↗");
             link.href = entry.source_url;
             link.target = "_blank";
@@ -1282,7 +1281,7 @@
           if (entry.venue) card.append(makeElement("p", "", entry.venue));
           const details = plainText(entry.body);
           if (details) card.append(makeElement("p", "", details.length > 220 ? details.slice(0, 217) + "..." : details));
-          if (entry.source_url && /^https?:\\/\\//i.test(entry.source_url)) {
+          if (entry.source_url && /^https?:\/\//i.test(entry.source_url)) {
             const link = makeElement("a", "button button-secondary", "Official Source ↗");
             link.href = entry.source_url;
             link.target = "_blank";
@@ -1295,8 +1294,8 @@
 
       function normalizeImagePath(path) {
         if (!path) return "";
-        if (/^https?:\\/\\//i.test(path) || path.startsWith("/")) return path;
-        return "/" + path.replace(/^\\.\\//, "");
+        if (/^https?:\/\//i.test(path) || path.startsWith("/")) return path;
+        return "/" + path.replace(/^\.\//, "");
       }
 
       function renderCmsGallery(entries) {
