@@ -809,7 +809,7 @@
           </div>
         </div>
 
-        <div class="card-grid">
+        <div class="card-grid" id="cms-news-grid">
           <article class="info-card">
             <span class="card-index">01 / NEWS</span>
             <h3>Fan Updates</h3>
@@ -857,7 +857,7 @@
           </div>
         </div>
 
-        <div class="card-grid">
+        <div class="card-grid" id="cms-events-grid">
           <article class="info-card event-card">
             <span class="event-tag">Announcements</span>
             <h3>Upcoming Events</h3>
@@ -1085,9 +1085,10 @@
       const nextButton = document.getElementById("lightbox-next");
       const filterButtons = Array.from(document.querySelectorAll("[data-gallery-filter]"));
       const galleryEmpty = document.getElementById("gallery-empty");
-      const allGalleryItems = galleryItems.slice();
+      let allGalleryItems = galleryItems.slice();
+      const galleryGrid = document.querySelector(".gallery-grid");
 
-      if (!lightbox || !lightboxImage || !closeButton || !prevButton || !nextButton || galleryItems.length === 0) {
+      if (!lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter || !closeButton || !prevButton || !nextButton || !galleryGrid) {
         return;
       }
 
@@ -1095,22 +1096,23 @@
       let lastFocusedElement = null;
 
       function showPhoto(index) {
+        if (galleryItems.length === 0) return false;
         currentIndex = (index + galleryItems.length) % galleryItems.length;
         const item = galleryItems[currentIndex];
-        const image = item.querySelector("img");
-        const caption = item.querySelector(".gallery-caption");
+        const image = item && item.querySelector("img");
+        const caption = item && item.querySelector(".gallery-caption");
 
-        if (!image) return;
+        if (!image) return false;
 
         lightboxImage.src = image.currentSrc || image.src;
         lightboxImage.alt = image.alt || "";
         lightboxCaption.textContent = caption ? caption.textContent.trim() : image.alt;
-        lightboxCounter.textContent = `${currentIndex + 1} / ${galleryItems.length}`;
+        lightboxCounter.textContent = String(currentIndex + 1) + " / " + String(galleryItems.length);
+        return true;
       }
-
       function openLightbox(index) {
+        if (!showPhoto(index)) return;
         lastFocusedElement = document.activeElement;
-        showPhoto(index);
         lightbox.classList.add("is-open");
         lightbox.setAttribute("aria-hidden", "false");
         document.body.classList.add("lightbox-open");
@@ -1127,7 +1129,9 @@
         }
       }
 
-      allGalleryItems.forEach((item) => {
+      function bindGalleryItem(item) {
+        if (item.dataset.lightboxBound === "true") return;
+        item.dataset.lightboxBound = "true";
         item.addEventListener("click", () => {
           const visibleIndex = galleryItems.indexOf(item);
           if (visibleIndex !== -1) openLightbox(visibleIndex);
@@ -1139,7 +1143,21 @@
             if (visibleIndex !== -1) openLightbox(visibleIndex);
           }
         });
-      });
+      }
+
+      allGalleryItems.forEach(bindGalleryItem);
+
+      function refreshGalleryItems() {
+        allGalleryItems = Array.from(document.querySelectorAll(".gallery-item"));
+        allGalleryItems.forEach(bindGalleryItem);
+        const activeFilter = document.querySelector("[data-gallery-filter].is-active");
+        const category = activeFilter ? activeFilter.dataset.galleryFilter : "all";
+        allGalleryItems.forEach((item) => {
+          item.hidden = !(category === "all" || item.dataset.category === category);
+        });
+        galleryItems = allGalleryItems.filter((item) => !item.hidden);
+        if (galleryEmpty) galleryEmpty.classList.toggle("is-visible", galleryItems.length === 0);
+      }
 
       filterButtons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -1150,13 +1168,7 @@
             filterButton.setAttribute("aria-pressed", String(isActive));
           });
 
-          allGalleryItems.forEach((item) => {
-            const matches = category === "all" || item.dataset.category === category;
-            item.hidden = !matches;
-          });
-
-          galleryItems = allGalleryItems.filter((item) => !item.hidden);
-          if (galleryEmpty) galleryEmpty.classList.toggle("is-visible", galleryItems.length === 0);
+          refreshGalleryItems();
         });
       });
 
@@ -1174,6 +1186,155 @@
         if (event.key === "ArrowLeft") showPhoto(currentIndex - 1);
         if (event.key === "ArrowRight") showPhoto(currentIndex + 1);
       });
+
+
+      // Load CMS-managed Markdown entries from the public GitHub repository.
+      // Text is inserted with textContent to avoid rendering untrusted HTML.
+      const CMS_REPO = "mtgaming478-del/janjingjing-myanmar-fanclub";
+      const CMS_BRANCH = "main";
+
+      function parseMarkdownEntry(markdown) {
+        const match = markdown.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
+        if (!match) return {};
+        const fields = {};
+        let currentKey = "";
+        match[1].split(/\r?\n/).forEach((line) => {
+          const fieldMatch = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
+          if (fieldMatch) {
+            currentKey = fieldMatch[1];
+            let value = fieldMatch[2].trim();
+            if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+              value = value.slice(1, -1);
+            }
+            fields[currentKey] = value;
+          }
+        });
+        fields.body = match[2].trim();
+        return fields;
+      }
+
+      function plainText(value) {
+        return String(value || "").replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+          .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+          .replace(/[#>*_\x60~-]/g, "").replace(/\s+/g, " ").trim();
+      }
+
+      function makeElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      }
+
+      function entryDate(value) {
+        if (!value) return "";
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("en", { year: "numeric", month: "short", day: "numeric" });
+      }
+
+      async function getCmsEntries(collection) {
+        const endpoint = "https://api.github.com/repos/" + CMS_REPO + "/contents/content/" + collection + "?ref=" + CMS_BRANCH;
+        const response = await fetch(endpoint, { headers: { Accept: "application/vnd.github+json" } });
+        if (response.status === 404) return [];
+        if (!response.ok) throw new Error("Unable to load " + collection + " entries");
+        const files = await response.json();
+        if (!Array.isArray(files)) return [];
+        const markdownFiles = files.filter((file) => file.type === "file" && /\.md$/i.test(file.name));
+        return Promise.all(markdownFiles.map(async (file) => {
+          const result = await fetch(file.download_url);
+          if (!result.ok) return null;
+          return { ...parseMarkdownEntry(await result.text()), _filename: file.name };
+        })).then((items) => items.filter(Boolean));
+      }
+
+      function renderNews(entries) {
+        const grid = document.getElementById("cms-news-grid");
+        if (!grid || !entries.length) return;
+        grid.replaceChildren();
+        entries.sort((a, b) => String(b.date || "").localeCompare(String(a.date || ""))).slice(0, 6).forEach((entry, index) => {
+          const card = makeElement("article", "info-card");
+          card.append(makeElement("span", "card-index", String(index + 1).padStart(2, "0") + " / " + String(entry.category || "NEWS").toUpperCase()));
+          card.append(makeElement("h3", "", entry.title || "Fanclub Update"));
+          const summary = plainText(entry.summary || entry.body);
+          if (summary) card.append(makeElement("p", "", summary.length > 240 ? summary.slice(0, 237) + "..." : summary));
+          const date = entryDate(entry.date);
+          if (date) card.append(makeElement("p", "section-label", date));
+          if (entry.source_url && /^https?:\/\//i.test(entry.source_url)) {
+            const link = makeElement("a", "button button-secondary", "Original Source ↗");
+            link.href = entry.source_url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            card.append(link);
+          }
+          grid.append(card);
+        });
+      }
+
+      function renderEvents(entries) {
+        const grid = document.getElementById("cms-events-grid");
+        if (!grid || !entries.length) return;
+        grid.replaceChildren();
+        entries.sort((a, b) => String(a.event_date || "").localeCompare(String(b.event_date || ""))).slice(0, 6).forEach((entry) => {
+          const card = makeElement("article", "info-card event-card");
+          card.append(makeElement("span", "event-tag", entry.status === "past" ? "Past Event" : "Event"));
+          card.append(makeElement("h3", "", entry.title || "Fanclub Event"));
+          const date = entryDate(entry.event_date);
+          if (date) card.append(makeElement("p", "", date));
+          if (entry.thailand_time) card.append(makeElement("p", "", "Thailand: " + entry.thailand_time));
+          if (entry.myanmar_time) card.append(makeElement("p", "", "Myanmar: " + entry.myanmar_time));
+          if (entry.venue) card.append(makeElement("p", "", entry.venue));
+          const details = plainText(entry.body);
+          if (details) card.append(makeElement("p", "", details.length > 220 ? details.slice(0, 217) + "..." : details));
+          if (entry.source_url && /^https?:\/\//i.test(entry.source_url)) {
+            const link = makeElement("a", "button button-secondary", "Official Source ↗");
+            link.href = entry.source_url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            card.append(link);
+          }
+          grid.append(card);
+        });
+      }
+
+      function normalizeImagePath(path) {
+        if (!path) return "";
+        if (/^https?:\/\//i.test(path) || path.startsWith("/")) return path;
+        return "/" + path.replace(/^\.\//, "");
+      }
+
+      function renderCmsGallery(entries) {
+        if (!galleryGrid || !entries.length) return;
+        entries.forEach((entry) => {
+          if (!entry.image || !entry.title) return;
+          const figure = makeElement("figure", "gallery-item");
+          figure.dataset.category = ["official", "events", "fanclub", "media"].includes(entry.category) ? entry.category : "official";
+          figure.tabIndex = 0;
+          figure.setAttribute("role", "button");
+          figure.setAttribute("aria-label", "Open " + entry.title);
+          const image = document.createElement("img");
+          image.src = normalizeImagePath(entry.image);
+          image.alt = entry.alt_text || entry.title;
+          image.loading = "lazy";
+          figure.append(image);
+          figure.append(makeElement("figcaption", "gallery-caption", entry.caption || entry.title));
+          galleryGrid.append(figure);
+          bindGalleryItem(figure);
+        });
+        refreshGalleryItems();
+      }
+
+      async function loadCmsContent() {
+        const [news, events, gallery] = await Promise.allSettled([
+          getCmsEntries("news"),
+          getCmsEntries("events"),
+          getCmsEntries("gallery")
+        ]);
+        if (news.status === "fulfilled") renderNews(news.value);
+        if (events.status === "fulfilled") renderEvents(events.value);
+        if (gallery.status === "fulfilled") renderCmsGallery(gallery.value);
+      }
+
+      loadCmsContent();
 
       const year = document.getElementById("current-year");
       if (year) year.textContent = new Date().getFullYear();
