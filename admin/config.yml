@@ -1,7 +1,7 @@
 backend:
   name: turbo-github
   turbo_site_id: 8d2e6e95-0f5e-4ffe-b697-41c49ad177b8
-  branch: feature/decap-turbo-cms
+  branch: main
 
 site_url: https://janjingjing-myanmar-fanclub.wasmer.app
 publish_mode: editorial_workflow
