@@ -1088,7 +1088,7 @@
       let allGalleryItems = galleryItems.slice();
       const galleryGrid = document.querySelector(".gallery-grid");
 
-      if (!lightbox || !lightboxImage || !closeButton || !prevButton || !nextButton || galleryItems.length === 0) {
+      if (!lightbox || !lightboxImage || !lightboxCaption || !lightboxCounter || !closeButton || !prevButton || !nextButton || !galleryGrid) {
         return;
       }
 
@@ -1096,22 +1096,23 @@
       let lastFocusedElement = null;
 
       function showPhoto(index) {
+        if (galleryItems.length === 0) return false;
         currentIndex = (index + galleryItems.length) % galleryItems.length;
         const item = galleryItems[currentIndex];
-        const image = item.querySelector("img");
-        const caption = item.querySelector(".gallery-caption");
+        const image = item && item.querySelector("img");
+        const caption = item && item.querySelector(".gallery-caption");
 
-        if (!image) return;
+        if (!image) return false;
 
         lightboxImage.src = image.currentSrc || image.src;
         lightboxImage.alt = image.alt || "";
         lightboxCaption.textContent = caption ? caption.textContent.trim() : image.alt;
-        lightboxCounter.textContent = `${currentIndex + 1} / ${galleryItems.length}`;
+        lightboxCounter.textContent = String(currentIndex + 1) + " / " + String(galleryItems.length);
+        return true;
       }
-
       function openLightbox(index) {
+        if (!showPhoto(index)) return;
         lastFocusedElement = document.activeElement;
-        showPhoto(index);
         lightbox.classList.add("is-open");
         lightbox.setAttribute("aria-hidden", "false");
         document.body.classList.add("lightbox-open");
@@ -1129,6 +1130,8 @@
       }
 
       function bindGalleryItem(item) {
+        if (item.dataset.lightboxBound === "true") return;
+        item.dataset.lightboxBound = "true";
         item.addEventListener("click", () => {
           const visibleIndex = galleryItems.indexOf(item);
           if (visibleIndex !== -1) openLightbox(visibleIndex);
@@ -1146,6 +1149,7 @@
 
       function refreshGalleryItems() {
         allGalleryItems = Array.from(document.querySelectorAll(".gallery-item"));
+        allGalleryItems.forEach(bindGalleryItem);
         const activeFilter = document.querySelector("[data-gallery-filter].is-active");
         const category = activeFilter ? activeFilter.dataset.galleryFilter : "all";
         allGalleryItems.forEach((item) => {
