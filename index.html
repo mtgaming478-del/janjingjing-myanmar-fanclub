@@ -925,3 +925,152 @@
               Janhae
             </figcaption>
           </figure
+            >
+      </div>
+    </section>
+
+    <!-- Gallery Lightbox -->
+    <div
+      class="lightbox"
+      id="gallery-lightbox"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Photo viewer"
+    >
+      <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close photo viewer">&times;</button>
+      <button class="lightbox-prev" id="lightbox-prev" type="button" aria-label="Previous photo">&#10094;</button>
+      <figure class="lightbox-content">
+        <img id="lightbox-image" src="" alt="">
+        <figcaption id="lightbox-caption"></figcaption>
+        <p class="lightbox-counter" id="lightbox-counter"></p>
+      </figure>
+      <button class="lightbox-next" id="lightbox-next" type="button" aria-label="Next photo">&#10095;</button>
+    </div>
+
+    <!-- Social Section -->
+    <section class="content-section social-section" id="social">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">Find Our Community</p>
+            <h2>Connect With Us</h2>
+            <p class="section-description">
+              Follow JanJingJing Myanmar Fanclub for community updates and shared moments.
+            </p>
+          </div>
+        </div>
+        <div class="social-grid">
+          <div class="social-card">
+            <strong>Facebook</strong>
+            <span>Fanclub updates</span>
+          </div>
+          <div class="social-card">
+            <strong>X</strong>
+            <span>News and conversations</span>
+          </div>
+          <div class="social-card">
+            <strong>Instagram</strong>
+            <span>Photos and moments</span>
+          </div>
+          <div class="social-card">
+            <strong>TikTok</strong>
+            <span>Fan edits and videos</span>
+          </div>
+        </div>
+        <p class="social-note">
+          Please visit the fanclub's official social profiles for current links and updates.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="current-year"></span> JanJingJing Myanmar Fanclub. Made with love by fans.</p>
+      <a href="#home">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const galleryItems = Array.from(document.querySelectorAll(".gallery-item"));
+      const lightbox = document.getElementById("gallery-lightbox");
+      const lightboxImage = document.getElementById("lightbox-image");
+      const lightboxCaption = document.getElementById("lightbox-caption");
+      const lightboxCounter = document.getElementById("lightbox-counter");
+      const closeButton = document.getElementById("lightbox-close");
+      const prevButton = document.getElementById("lightbox-prev");
+      const nextButton = document.getElementById("lightbox-next");
+
+      if (!lightbox || !lightboxImage || !closeButton || !prevButton || !nextButton || galleryItems.length === 0) {
+        return;
+      }
+
+      let currentIndex = 0;
+      let lastFocusedElement = null;
+
+      function showPhoto(index) {
+        currentIndex = (index + galleryItems.length) % galleryItems.length;
+        const item = galleryItems[currentIndex];
+        const image = item.querySelector("img");
+        const caption = item.querySelector(".gallery-caption");
+
+        if (!image) return;
+
+        lightboxImage.src = image.currentSrc || image.src;
+        lightboxImage.alt = image.alt || "";
+        lightboxCaption.textContent = caption ? caption.textContent.trim() : image.alt;
+        lightboxCounter.textContent = `${currentIndex + 1} / ${galleryItems.length}`;
+      }
+
+      function openLightbox(index) {
+        lastFocusedElement = document.activeElement;
+        showPhoto(index);
+        lightbox.classList.add("is-open");
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.classList.add("lightbox-open");
+        closeButton.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("is-open");
+        lightbox.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("lightbox-open");
+        lightboxImage.removeAttribute("src");
+        if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+          lastFocusedElement.focus();
+        }
+      }
+
+      galleryItems.forEach((item, index) => {
+        item.addEventListener("click", () => openLightbox(index));
+        item.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openLightbox(index);
+          }
+        });
+      });
+
+      closeButton.addEventListener("click", closeLightbox);
+      prevButton.addEventListener("click", () => showPhoto(currentIndex - 1));
+      nextButton.addEventListener("click", () => showPhoto(currentIndex + 1));
+
+      lightbox.addEventListener("click", (event) => {
+        if (event.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (!lightbox.classList.contains("is-open")) return;
+        if (event.key === "Escape") closeLightbox();
+        if (event.key === "ArrowLeft") showPhoto(currentIndex - 1);
+        if (event.key === "ArrowRight") showPhoto(currentIndex + 1);
+      });
+
+      const year = document.getElementById("current-year");
+      if (year) year.textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
