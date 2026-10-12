@@ -1,0 +1,72 @@
+backend:
+  name: turbo-github
+  turbo_site_id: REPLACE_WITH_TURBO_SITE_ID
+  branch: feature/decap-turbo-cms
+
+site_url: https://janjingjing-myanmar-fanclub.wasmer.app
+publish_mode: editorial_workflow
+
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: news
+    label: News & Updates
+    label_singular: News Item
+    folder: content/news
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} — {{date}}"
+    sortable_fields:
+      - date
+      - title
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Category, name: category, widget: select, options: [official, fanclub, events, media, trending] }
+      - { label: Publish Date, name: date, widget: datetime, format: "YYYY-MM-DD HH:mm", date_format: "YYYY-MM-DD", time_format: "HH:mm" }
+      - { label: Short Summary, name: summary, widget: text }
+      - { label: Article Content, name: body, widget: markdown }
+      - { label: Original Source URL, name: source_url, widget: string, required: false }
+      - { label: Cover Image, name: image, widget: image, required: false }
+      - { label: Verified, name: verified, widget: boolean, default: false }
+
+  - name: events
+    label: Events & Schedule
+    label_singular: Event
+    folder: content/events
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} — {{event_date}}"
+    sortable_fields:
+      - event_date
+      - title
+    fields:
+      - { label: Event Title, name: title, widget: string }
+      - { label: Category, name: category, widget: select, options: [fanmeeting, appearance, online, fanproject, release] }
+      - { label: Event Date, name: event_date, widget: datetime, format: "YYYY-MM-DD HH:mm", date_format: "YYYY-MM-DD", time_format: "HH:mm" }
+      - { label: Thailand Time (ICT, UTC+7), name: thailand_time, widget: string, required: false }
+      - { label: Myanmar Time (MMT, UTC+6:30), name: myanmar_time, widget: string, required: false }
+      - { label: Venue or Platform, name: venue, widget: string, required: false }
+      - { label: Details, name: body, widget: markdown }
+      - { label: Official Source URL, name: source_url, widget: string, required: false }
+      - { label: Status, name: status, widget: select, options: [upcoming, past], default: upcoming }
+      - { label: Verified, name: verified, widget: boolean, default: false }
+
+  - name: gallery
+    label: Gallery
+    label_singular: Gallery Photo
+    folder: content/gallery
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    summary: "{{title}} — {{category}}"
+    fields:
+      - { label: Photo Title, name: title, widget: string }
+      - { label: Image, name: image, widget: image }
+      - { label: Category, name: category, widget: select, options: [official, events, fanclub, media] }
+      - { label: Caption, name: caption, widget: string, required: false }
+      - { label: Alt Text, name: alt_text, widget: string }
+      - { label: Date, name: date, widget: datetime, required: false, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: Original Source URL, name: source_url, widget: string, required: false }
