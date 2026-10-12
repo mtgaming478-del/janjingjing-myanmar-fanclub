@@ -1,7 +1,6 @@
 ---
-title: JJJ
-image: /images/uploads/26570.jpg
+title: JanJingJing with Jewel
+image: /images/uploads/26574.jpg
 category: official
-caption: JJJ
-alt_text: JJJ
+alt_text: JanJingJing with Jewel in Grabfood
 ---
