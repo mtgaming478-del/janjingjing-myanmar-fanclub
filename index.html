@@ -532,20 +532,44 @@
     }
 
     .social-card {
+      display: block;
+      min-height: 112px;
       padding: 20px;
+      color: var(--white);
+      text-decoration: none;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
+      transition: border-color 180ms ease, transform 180ms ease, background 180ms ease;
+    }
+
+    .social-card:hover,
+    .social-card:focus-visible {
+      border-color: var(--lavender);
+      background: var(--surface-light);
+      transform: translateY(-2px);
+      outline: none;
     }
 
     .social-card strong {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      font-size: 16px;
     }
 
     .social-card span {
+      display: block;
       color: var(--muted);
       font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .social-card .social-visit {
+      margin-top: 12px;
+      color: var(--lavender);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
     }
 
     .social-note {
@@ -1042,25 +1066,39 @@
           </div>
         </div>
         <div class="social-grid">
-          <div class="social-card">
+          <a class="social-card" href="https://www.facebook.com/share/19YmjfMymP/" target="_blank" rel="noopener noreferrer" aria-label="Visit JanJingJing Myanmar Fanclub on Facebook">
             <strong>Facebook</strong>
             <span>Fanclub updates</span>
-          </div>
-          <div class="social-card">
+            <span class="social-visit">VISIT PAGE ↗</span>
+          </a>
+          <a class="social-card" href="https://x.com/JanJingJingMMFC" target="_blank" rel="noopener noreferrer" aria-label="Visit JanJingJing Myanmar Fanclub on X">
             <strong>X</strong>
             <span>News and conversations</span>
-          </div>
-          <div class="social-card">
+            <span class="social-visit">FOLLOW ON X ↗</span>
+          </a>
+          <a class="social-card" href="https://instagram.com/janjingjingmmfc?dlrf=MWFza3ZvMXBqdXU2cQ%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Visit JanJingJing Myanmar Fanclub on Instagram">
             <strong>Instagram</strong>
             <span>Photos and moments</span>
-          </div>
-          <div class="social-card">
+            <span class="social-visit">VIEW PROFILE ↗</span>
+          </a>
+          <a class="social-card" href="https://www.tiktok.com/@janjingjingmmfc?_r=1&_t=ZS-9AVZ9QDuGoe" target="_blank" rel="noopener noreferrer" aria-label="Visit JanJingJing Myanmar Fanclub on TikTok">
             <strong>TikTok</strong>
             <span>Fan edits and videos</span>
-          </div>
+            <span class="social-visit">WATCH VIDEOS ↗</span>
+          </a>
+          <a class="social-card" href="https://t.me/JanJingJingMMFC" target="_blank" rel="noopener noreferrer" aria-label="Join JanJingJing Myanmar Fanclub Telegram Channel">
+            <strong>Telegram Channel</strong>
+            <span>Latest updates &amp; announcements</span>
+            <span class="social-visit">JOIN CHANNEL ↗</span>
+          </a>
+          <a class="social-card" href="https://t.me/JanJingJingMMFC_bot" target="_blank" rel="noopener noreferrer" aria-label="Contact JanJingJing Myanmar Fanclub Support Chat on Telegram">
+            <strong>Contact Support Chat</strong>
+            <span>Questions, feedback &amp; assistance</span>
+            <span class="social-visit">CHAT WITH US ↗</span>
+          </a>
         </div>
         <p class="social-note">
-          Please visit the fanclub's official social profiles for current links and updates.
+          Follow our official platforms for updates, and contact our support chat if you need assistance.
         </p>
       </div>
     </section>
