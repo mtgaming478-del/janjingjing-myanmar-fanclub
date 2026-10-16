@@ -304,7 +304,9 @@
 .event-card{cursor:pointer;transition:border-color .2s ease,transform .2s ease}
 .event-card:hover,.event-card:focus-visible{border-color:var(--lavender);transform:translateY(-2px);outline:none}
 .event-short-info{color:var(--muted);font-size:13px}
-.events-actions{display:flex;margin-top:22px}
+.events-section{padding-bottom:44px!important}
+    .events-actions{display:flex;justify-content:flex-start;margin-top:20px}
+    .events-actions .button{min-height:44px;padding:10px 18px}
 .event-detail-overlay{position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(8,7,11,.88);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}
 .event-detail-overlay.is-open{opacity:1;visibility:visible;pointer-events:auto}
 .event-detail-panel{position:relative;width:min(720px,100%);max-height:84vh;overflow:auto;padding:clamp(24px,5vw,42px);border:1px solid var(--border);border-radius:22px;background:var(--surface)}
@@ -668,6 +670,23 @@
         padding: 50px 0;
       }
 
+      .events-section {
+        padding-top: 46px !important;
+        padding-bottom: 32px !important;
+      }
+
+      .events-actions {
+        margin-top: 16px;
+      }
+
+      .events-actions .button {
+        max-width: 100%;
+        min-height: 42px;
+        padding: 9px 15px;
+        font-size: 12px;
+        text-align: center;
+      }
+
       .section-heading {
         align-items: flex-start;
         flex-direction: column;
@@ -923,10 +942,12 @@
             </p>
           </article>
         </div>
+        <div class="events-actions">
+          <a class="button button-secondary" href="/events/">View All Events &amp; Activities ↗</a>
+        </div>
       </div>
     </section>
 
-    <div class="events-actions"><a class="button button-secondary" href="/events/">View All Events &amp; Activities ↗</a></div>
     <div class="event-detail-overlay" id="event-detail-overlay" aria-hidden="true">
       <section class="event-detail-panel" role="dialog" aria-modal="true" aria-labelledby="event-detail-title">
         <button class="event-detail-close" id="event-detail-close" type="button" aria-label="Close event details">&times;</button>
