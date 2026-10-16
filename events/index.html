@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17151B">
+<meta name="description" content="Browse upcoming events, past appearances and fan activities from JanJingJing Myanmar Fanclub.">
+<title>Events &amp; Activities | JanJingJing Myanmar Fanclub</title>
+<style>
+:root{--bg:#17151B;--surface:#211E28;--surface-light:#292532;--white:#fff;--lavender:#DCCCFB;--pink:#F8DCE8;--muted:#B9B2C3;--border:rgba(220,204,251,.15);--radius:18px;--width:1120px}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--white);font:16px/1.7 Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}body.modal-open{overflow:hidden}a{color:inherit;text-decoration:none}button{font:inherit}.container{width:min(var(--width),calc(100% - 40px));margin-inline:auto}
+.site-header{position:sticky;top:0;z-index:10;background:rgba(23,21,27,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{font-size:15px;font-weight:800;letter-spacing:1.5px}.nav-links{display:flex;flex-wrap:wrap;gap:12px 24px}.nav-links a{color:var(--muted);font-size:13px}.nav-links a:hover,.nav-links a:focus-visible{color:var(--pink)}
+main{min-height:70vh}.hero{padding:68px 0 38px;background:radial-gradient(ellipse at 15% 10%,rgba(220,204,251,.13),transparent 48%),radial-gradient(ellipse at 90% 85%,rgba(248,220,232,.08),transparent 42%)}.eyebrow,.section-label{color:var(--lavender);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase}.hero h1{margin:12px 0;font-size:clamp(34px,5vw,54px);line-height:1.15;letter-spacing:-1.4px}.hero p.copy{max-width:650px;color:var(--muted);font-size:15px}.section{padding:24px 0 72px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px}.tabs{display:flex;flex-wrap:wrap;gap:8px}.tab{padding:9px 16px;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;font-size:12px;font-weight:700}.tab.active{background:var(--lavender);border-color:var(--lavender);color:#21172D}.count{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-height:210px;padding:25px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:transform .2s,border-color .2s}.card:hover,.card:focus-visible{transform:translateY(-2px);border-color:var(--lavender);outline:none}.tag{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(220,204,251,.1);color:var(--lavender);font-size:11px;font-weight:700;text-transform:capitalize}.card h2{font-size:19px;line-height:1.45}.card .date{color:var(--muted);font-size:13px}.card .summary{color:var(--muted);font-size:13px}.card .open{margin-top:auto;color:var(--lavender);font-size:11px;font-weight:700;letter-spacing:1px}.empty{padding:30px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);text-align:center}
+.modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(8,7,11,.9);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s,visibility .2s}.modal.open{opacity:1;visibility:visible;pointer-events:auto}.panel{width:min(720px,100%);max-height:85vh;overflow:auto;padding:clamp(24px,5vw,42px);border:1px solid var(--border);border-radius:22px;background:var(--surface)}.close{float:right;width:40px;height:40px;margin:-8px -8px 10px 14px;border:1px solid var(--border);border-radius:50%;background:var(--surface-light);color:white;font-size:24px;cursor:pointer}.detail-title{clear:both;margin:12px 0 18px;font-size:clamp(25px,4vw,36px);line-height:1.25}.meta{display:grid;gap:9px;margin:18px 0 24px;color:var(--muted);font-size:14px}.body-copy{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--muted);font-size:14px}.source{margin-top:24px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border:1px solid var(--border);border-radius:999px;font-size:13px;font-weight:700}.button-primary{background:var(--lavender);color:#21172D;border-color:var(--lavender)}
+footer{padding:28px 0;border-top:1px solid var(--border);color:var(--muted);font-size:11px}.footer-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.footer-inner a{color:var(--lavender)}
+@media(max-width:760px){.container{width:min(100% - 32px,var(--width))}.nav{align-items:flex-start;flex-direction:column;padding:16px 0;gap:12px}.nav-links{gap:10px 18px}.hero{padding:46px 0 28px}.grid{grid-template-columns:1fr;gap:12px}.card{min-height:0;padding:21px}.section{padding-bottom:50px}.toolbar{align-items:flex-start;flex-direction:column}.modal{padding:12px}.panel{max-height:90vh;padding:24px 20px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="site-header"><nav class="nav container" aria-label="Main navigation">
+<a class="brand" href="/">JanJingJing Myanmar Fanclub</a>
+<div class="nav-links"><a href="/">Home</a><a href="/about/">About</a><a href="/#updates">News</a><a href="/events/" aria-current="page">Events</a><a href="/#gallery">Gallery</a><a href="/#social">Social</a></div>
+</nav></header>
+<main>
+<section class="hero"><div class="container"><p class="eyebrow">Mark Your Calendar</p><h1>Events &amp; Activities</h1><p class="copy">Explore upcoming schedules, artist appearances and fan activities, or revisit past events. Select any event to view its full details and original source.</p></div></section>
+<section class="section"><div class="container">
+<div class="toolbar"><div class="tabs" role="group" aria-label="Filter events">
+<button class="tab active" type="button" data-filter="upcoming" aria-pressed="true">Upcoming Events</button>
+<button class="tab" type="button" data-filter="past" aria-pressed="false">Past Events</button>
+<button class="tab" type="button" data-filter="all" aria-pressed="false">All Events</button>
+</div><p class="count" id="event-count" aria-live="polite">Loading events…</p></div>
+<div class="grid" id="events-grid"><p class="empty">Loading event schedules…</p></div>
+</div></section>
+</main>
+<div class="modal" id="event-modal" aria-hidden="true"><section class="panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+<button class="close" id="modal-close" type="button" aria-label="Close event details">&times;</button><span class="tag" id="detail-category">EVENT</span><h2 class="detail-title" id="detail-title">Event Details</h2><div class="meta" id="detail-meta"></div><div class="body-copy" id="detail-body"></div><div class="source" id="detail-source"></div>
+</section></div>
+<footer><div class="container footer-inner"><p>&copy; <span id="year"></span> JanJingJing Myanmar Fanclub. Made with love by fans.</p><a href="/">Back to Home ↑</a></div></footer>
+<script>
+(() => {
+const REPO="mtgaming478-del/janjingjing-myanmar-fanclub", BRANCH="main";
+const grid=document.getElementById("events-grid"), count=document.getElementById("event-count"), tabs=[...document.querySelectorAll("[data-filter]")];
+const modal=document.getElementById("event-modal"), close=document.getElementById("modal-close");
+let entries=[], activeFilter="upcoming", lastFocus=null;
+document.getElementById("year").textContent=new Date().getFullYear();
+function parseMarkdown(text){const m=text.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);if(!m)return{};const fields={};m[1].split(/\r?\n/).forEach(line=>{const f=line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);if(f){let v=f[2].trim();if((v.startsWith('"')&&v.endsWith('"'))||(v.startsWith("'")&&v.endsWith("'")))v=v.slice(1,-1);fields[f[1]]=v;}});fields.body=m[2].trim();return fields;}
+function plain(text){return String(text||"").replace(/!\[([^\]]*)\]\([^)]*\)/g,"$1").replace(/\[([^\]]+)\]\([^)]*\)/g,"$1").replace(/[#>*_~]/g,"").replace(/\s+/g," ").trim();}
+function dateTime(entry){const n=Date.parse(String(entry.event_date||"").replace(" ","T"));return Number.isNaN(n)?Number.MAX_SAFE_INTEGER:n;}
+function isPast(entry){return entry.status==="past"||dateTime(entry)<Date.now();}
+function fmtDate(value){if(!value)return"";const d=new Date(String(value).replace(" ","T"));return Number.isNaN(d.getTime())?value:d.toLocaleDateString("en",{year:"numeric",month:"short",day:"numeric"});}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function openDetails(entry){lastFocus=document.activeElement;document.getElementById("detail-title").textContent=entry.title||"Fanclub Event";document.getElementById("detail-category").textContent=String(entry.category||"event").replace(/[-_]/g," ").toUpperCase();const meta=document.getElementById("detail-meta");meta.replaceChildren();[["Date",fmtDate(entry.event_date)],["Thailand Time",entry.thailand_time],["Myanmar Time",entry.myanmar_time],["Venue / Platform",entry.venue],["Status",isPast(entry)?"Past Event":"Upcoming Event"]].forEach(([k,v])=>{if(v)meta.append(el("p","",k+": "+v));});document.getElementById("detail-body").textContent=entry.body||"";const source=document.getElementById("detail-source");source.replaceChildren();if(entry.source_url&&/^https?:\/\//i.test(entry.source_url)){const a=el("a","button button-primary","Official Source ↗");a.href=entry.source_url;a.target="_blank";a.rel="noopener noreferrer";source.append(a);}modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.classList.add("modal-open");close.focus();}
+function closeModal(){modal.classList.remove("open");modal.setAttribute("aria-hidden","true");document.body.classList.remove("modal-open");if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+function card(entry){const c=el("article","card");c.tabIndex=0;c.setAttribute("role","button");c.setAttribute("aria-label","View details for "+(entry.title||"event"));c.append(el("span","tag",String(entry.category||"event").replace(/[-_]/g," ")));c.append(el("h2","",entry.title||"Fanclub Event"));c.append(el("p","date",fmtDate(entry.event_date)));const summary=entry.venue||entry.thailand_time||entry.myanmar_time||plain(entry.body);if(summary)c.append(el("p","summary",summary.length>112?summary.slice(0,109)+"...":summary));c.append(el("span","open","VIEW DETAILS ↗"));c.addEventListener("click",()=>openDetails(entry));c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openDetails(entry);}});return c;}
+function render(){const sorted=[...entries].sort((a,b)=>dateTime(a)-dateTime(b));const visible=sorted.filter(e=>activeFilter==="all"||(activeFilter==="past"?isPast(e):!isPast(e)));grid.replaceChildren();count.textContent=visible.length+" "+(visible.length===1?"event":"events");if(!visible.length){grid.append(el("p","empty",activeFilter==="past"?"No past events are available yet.":"No upcoming events have been announced yet."));return;}visible.forEach(e=>grid.append(card(e)));}
+tabs.forEach(btn=>btn.addEventListener("click",()=>{activeFilter=btn.dataset.filter;tabs.forEach(t=>{const on=t===btn;t.classList.toggle("active",on);t.setAttribute("aria-pressed",String(on));});render();}));
+close.addEventListener("click",closeModal);modal.addEventListener("click",e=>{if(e.target===modal)closeModal();});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("open"))closeModal();});
+async function load(){try{const url="https://api.github.com/repos/"+REPO+"/contents/content/events?ref="+BRANCH;const r=await fetch(url,{headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("Unable to load event entries");const files=await r.json();const md=Array.isArray(files)?files.filter(f=>f.type==="file"&&/\.md$/i.test(f.name)):[];entries=(await Promise.all(md.map(async f=>{const res=await fetch(f.download_url);if(!res.ok)return null;return parseMarkdown(await res.text());}))).filter(Boolean);render();}catch(error){grid.replaceChildren(el("p","empty","Event schedules could not be loaded right now. Please try again later."));count.textContent="";}}
+load();
+})();
+</script>
+</body>
+</html>
