@@ -316,6 +316,7 @@
 .event-detail-body{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--muted);font-size:14px}
 .event-detail-source{margin-top:24px}
 .event-empty{padding:28px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);text-align:center}
+    .gallery-actions{margin-top:24px}
     /* Professional Gallery Grid */
 
     .gallery-grid {
@@ -800,7 +801,7 @@
         <a href="/about/">About</a>
       <a href="#updates">News</a>
         <a href="/events/">Events</a>
-        <a href="#gallery">Gallery</a>
+        <a href="/gallery/">Gallery</a>
         <a href="#social">Social</a>
       </div>
     </nav>
@@ -1075,6 +1076,7 @@
         <p class="gallery-empty" id="gallery-empty" role="status">
           No photos are available in this category yet.
         </p>
+        <div class="events-actions gallery-actions"><a class="button button-secondary" href="/gallery/">View All Photos ↗</a></div>
       </div>
     </section>
 
@@ -1370,27 +1372,26 @@
         return "/" + path.replace(/^\.\//, "");
       }
 
+      const staticGalleryEntries = [
+        { title: "JanJingJing", image: "images/couple.jpg", category: "official", caption: "JanJingJing", alt_text: "JanJingJing couple photograph" },
+        { title: "Behind the Moments", image: "images/back-view.jpg", category: "media", caption: "Behind the Moments", alt_text: "JanJingJing viewed from behind" },
+        { title: "Jing Jing Yu", image: "images/jingjing-portrait.jpg", category: "official", caption: "Jing Jing Yu", alt_text: "Jing Jing Yu portrait" },
+        { title: "Janhae", image: "images/janhae-portrait.jpg", category: "official", caption: "Janhae", alt_text: "Janhae portrait" },
+        { title: "Family Jewel", image: "images/family-jewel.jpg", category: "fanclub", caption: "Family Jewel", alt_text: "Family Jewel photograph" }
+      ];
       function renderCmsGallery(entries) {
-        if (!galleryGrid || !entries.length) return;
-        entries.forEach((entry) => {
-          if (!entry.image || !entry.title) return;
-          const figure = makeElement("figure", "gallery-item");
-          figure.dataset.category = ["official", "events", "fanclub", "media"].includes(entry.category) ? entry.category : "official";
-          figure.tabIndex = 0;
-          figure.setAttribute("role", "button");
-          figure.setAttribute("aria-label", "Open " + entry.title);
-          const image = document.createElement("img");
-          image.src = normalizeImagePath(entry.image);
-          image.alt = entry.alt_text || entry.title;
-          image.loading = "lazy";
-          figure.append(image);
-          figure.append(makeElement("figcaption", "gallery-caption", entry.caption || entry.title));
-          galleryGrid.append(figure);
-          bindGalleryItem(figure);
-        });
-        refreshGalleryItems();
+        if (!galleryGrid) return;
+        const cmsEntries = entries.filter(entry => entry.image && entry.title).map(entry => ({...entry,_cms:true,_sortDate:String(entry.date||"").slice(0,10)}));
+        const staticEntries = staticGalleryEntries.map(entry => ({...entry,_cms:false,_sortDate:""}));
+        const combined = cmsEntries.concat(staticEntries).sort((a,b) => String(b._sortDate||"").localeCompare(String(a._sortDate||"")) || (a._cms===b._cms?0:a._cms?-1:1));
+        galleryGrid.replaceChildren();
+        combined.slice(0,6).forEach(entry => {
+          const figure=makeElement("figure","gallery-item"); figure.dataset.category=["official","events","fanclub","media"].includes(entry.category)?entry.category:"official";
+          figure.tabIndex=0;figure.setAttribute("role","button");figure.setAttribute("aria-label","Open "+entry.title);
+          const image=document.createElement("img");image.src=normalizeImagePath(entry.image);image.alt=entry.alt_text||entry.title;image.loading="lazy";
+          figure.append(image);figure.append(makeElement("figcaption","gallery-caption",entry.caption||entry.title));galleryGrid.append(figure);bindGalleryItem(figure);
+        }); refreshGalleryItems();
       }
-
       async function loadCmsContent() {
         const [news, events, gallery] = await Promise.allSettled([
           getCmsEntries("news"),
