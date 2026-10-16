@@ -317,6 +317,11 @@
 .event-detail-source{margin-top:24px}
 .event-empty{padding:28px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);text-align:center}
     .gallery-actions{margin-top:24px}
+    .news-actions{margin-top:24px}
+    .news-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+    .verified-label{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;background:rgba(220,204,251,.12);color:var(--lavender);font-size:10px;font-weight:700;letter-spacing:.08em}
+    .news-read{margin-top:4px}
+    .news-source{color:var(--lavender);font-size:12px;font-weight:700}
     /* Professional Gallery Grid */
 
     .gallery-grid {
@@ -799,7 +804,7 @@
       <div class="nav-links">
         <a href="#home">Home</a>
         <a href="/about/">About</a>
-      <a href="#updates">News</a>
+      <a href="/news/">News</a>
         <a href="/events/">Events</a>
         <a href="/gallery/">Gallery</a>
         <a href="#social">Social</a>
@@ -860,9 +865,9 @@
             <h2>Latest News &amp; Updates</h2>
 
             <p class="section-description">
-              A home for fan updates, announcements and
-              memorable moments. Verified news will be
-              shared here by the fanclub.
+              The latest fan updates, announcements and
+              memorable moments. Browse the news archive
+              to revisit earlier posts.
             </p>
           </div>
         </div>
@@ -895,6 +900,9 @@
               celebrate the moments we appreciate together.
             </p>
           </article>
+        </div>
+        <div class="events-actions news-actions">
+          <a class="button button-secondary" href="/news/">View All News &amp; Updates ↗</a>
         </div>
       </div>
     </section>
@@ -1335,25 +1343,24 @@
         const grid = document.getElementById("cms-news-grid");
         if (!grid || !entries.length) return;
         grid.replaceChildren();
-        entries.sort((a, b) => String(b.date || "").localeCompare(String(a.date || ""))).slice(0, 6).forEach((entry, index) => {
-          const card = makeElement("article", "info-card");
-          card.append(makeElement("span", "card-index", String(index + 1).padStart(2, "0") + " / " + String(entry.category || "NEWS").toUpperCase()));
+        [...entries].sort((a, b) => String(b.date || "").localeCompare(String(a.date || ""))).slice(0, 3).forEach((entry, index) => {
+          const card = makeElement("article", "info-card news-card");
+          const category = String(entry.category || "news").toUpperCase();
+          card.append(makeElement("span", "card-index", String(index + 1).padStart(2, "0") + " / " + category));
+          if (String(entry.verified).toLowerCase() === "true") card.append(makeElement("span", "verified-label", "✓ VERIFIED"));
           card.append(makeElement("h3", "", entry.title || "Fanclub Update"));
           const summary = plainText(entry.summary || entry.body);
-          if (summary) card.append(makeElement("p", "", summary.length > 240 ? summary.slice(0, 237) + "..." : summary));
+          if (summary) card.append(makeElement("p", "", summary.length > 180 ? summary.slice(0, 177) + "..." : summary));
           const date = entryDate(entry.date);
           if (date) card.append(makeElement("p", "section-label", date));
+          const slug = String(entry._filename || "").replace(/\.md$/i, "");
+          if (slug) { const read = makeElement("a", "button button-secondary news-read", "Read Details ↗"); read.href = "/news/?article=" + encodeURIComponent(slug); card.append(read); }
           if (entry.source_url && /^https?:\/\//i.test(entry.source_url)) {
-            const link = makeElement("a", "button button-secondary", "Original Source ↗");
-            link.href = entry.source_url;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            card.append(link);
+            const source = makeElement("a", "news-source", "Original Source ↗"); source.href = entry.source_url; source.target = "_blank"; source.rel = "noopener noreferrer"; card.append(source);
           }
           grid.append(card);
         });
       }
-
       function eventTimestamp(entry) { const n=Date.parse(String(entry.event_date||"").replace(" ","T")); return Number.isNaN(n)?Number.MAX_SAFE_INTEGER:n; }
       function eventIsPast(entry) { return entry.status==="past" || eventTimestamp(entry)<Date.now(); }
       function openEventDetails(entry) {
