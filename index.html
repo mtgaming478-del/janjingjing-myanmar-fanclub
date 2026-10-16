@@ -301,6 +301,19 @@
       font-weight: 700;
     }
 
+.event-card{cursor:pointer;transition:border-color .2s ease,transform .2s ease}
+.event-card:hover,.event-card:focus-visible{border-color:var(--lavender);transform:translateY(-2px);outline:none}
+.event-short-info{color:var(--muted);font-size:13px}
+.events-actions{display:flex;margin-top:22px}
+.event-detail-overlay{position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(8,7,11,.88);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}
+.event-detail-overlay.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.event-detail-panel{position:relative;width:min(720px,100%);max-height:84vh;overflow:auto;padding:clamp(24px,5vw,42px);border:1px solid var(--border);border-radius:22px;background:var(--surface)}
+.event-detail-close{float:right;width:40px;height:40px;border:1px solid var(--border);border-radius:50%;background:var(--surface-light);color:var(--white);font-size:24px;cursor:pointer}
+.event-detail-title{clear:both;margin:10px 0 18px;font-size:clamp(25px,4vw,36px);line-height:1.25}
+.event-detail-meta{display:grid;gap:10px;margin:18px 0 24px;color:var(--muted);font-size:14px}
+.event-detail-body{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--muted);font-size:14px}
+.event-detail-source{margin-top:24px}
+.event-empty{padding:28px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);text-align:center}
     /* Professional Gallery Grid */
 
     .gallery-grid {
@@ -767,7 +780,7 @@
         <a href="#home">Home</a>
         <a href="/about/">About</a>
       <a href="#updates">News</a>
-        <a href="#events">Events</a>
+        <a href="/events/">Events</a>
         <a href="#gallery">Gallery</a>
         <a href="#social">Social</a>
       </div>
@@ -912,6 +925,15 @@
         </div>
       </div>
     </section>
+
+    <div class="events-actions"><a class="button button-secondary" href="/events/">View All Events &amp; Activities ↗</a></div>
+    <div class="event-detail-overlay" id="event-detail-overlay" aria-hidden="true">
+      <section class="event-detail-panel" role="dialog" aria-modal="true" aria-labelledby="event-detail-title">
+        <button class="event-detail-close" id="event-detail-close" type="button" aria-label="Close event details">&times;</button>
+        <span class="event-tag" id="event-detail-category">EVENT</span><h2 class="event-detail-title" id="event-detail-title">Event Details</h2>
+        <div class="event-detail-meta" id="event-detail-meta"></div><div class="event-detail-body" id="event-detail-body"></div><div class="event-detail-source" id="event-detail-source"></div>
+      </section>
+    </div>
 
     <!-- Photo Gallery Section -->
     <section class="content-section" id="gallery">
@@ -1309,32 +1331,18 @@
         });
       }
 
-      function renderEvents(entries) {
-        const grid = document.getElementById("cms-events-grid");
-        if (!grid || !entries.length) return;
-        grid.replaceChildren();
-        entries.sort((a, b) => String(a.event_date || "").localeCompare(String(b.event_date || ""))).slice(0, 6).forEach((entry) => {
-          const card = makeElement("article", "info-card event-card");
-          card.append(makeElement("span", "event-tag", entry.status === "past" ? "Past Event" : "Event"));
-          card.append(makeElement("h3", "", entry.title || "Fanclub Event"));
-          const date = entryDate(entry.event_date);
-          if (date) card.append(makeElement("p", "", date));
-          if (entry.thailand_time) card.append(makeElement("p", "", "Thailand: " + entry.thailand_time));
-          if (entry.myanmar_time) card.append(makeElement("p", "", "Myanmar: " + entry.myanmar_time));
-          if (entry.venue) card.append(makeElement("p", "", entry.venue));
-          const details = plainText(entry.body);
-          if (details) card.append(makeElement("p", "", details.length > 220 ? details.slice(0, 217) + "..." : details));
-          if (entry.source_url && /^https?:\/\//i.test(entry.source_url)) {
-            const link = makeElement("a", "button button-secondary", "Official Source ↗");
-            link.href = entry.source_url;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            card.append(link);
-          }
-          grid.append(card);
-        });
+      function eventTimestamp(entry) { const n=Date.parse(String(entry.event_date||"").replace(" ","T")); return Number.isNaN(n)?Number.MAX_SAFE_INTEGER:n; }
+      function eventIsPast(entry) { return entry.status==="past" || eventTimestamp(entry)<Date.now(); }
+      function openEventDetails(entry) {
+        const overlay=document.getElementById("event-detail-overlay"), title=document.getElementById("event-detail-title"), category=document.getElementById("event-detail-category"), meta=document.getElementById("event-detail-meta"), body=document.getElementById("event-detail-body"), source=document.getElementById("event-detail-source"); if(!overlay||!title||!category||!meta||!body||!source)return;
+        title.textContent=entry.title||"Fanclub Event"; category.textContent=String(entry.category||"event").replace(/[-_]/g," ").toUpperCase(); meta.replaceChildren();
+        [["Date",entryDate(entry.event_date)],["Thailand Time",entry.thailand_time],["Myanmar Time",entry.myanmar_time],["Venue / Platform",entry.venue],["Status",eventIsPast(entry)?"Past Event":"Upcoming Event"]].forEach(([label,value])=>{if(value)meta.append(makeElement("p","",label+": "+value));}); body.textContent=String(entry.body||"").trim(); source.replaceChildren();
+        if(entry.source_url && /^https?:\/\//i.test(entry.source_url)){const a=makeElement("a","button button-primary","Official Source ↗");a.href=entry.source_url;a.target="_blank";a.rel="noopener noreferrer";source.append(a);} overlay.classList.add("is-open");overlay.setAttribute("aria-hidden","false");document.body.classList.add("lightbox-open");document.getElementById("event-detail-close")?.focus();
       }
-
+      function closeEventDetails(){const overlay=document.getElementById("event-detail-overlay");if(overlay){overlay.classList.remove("is-open");overlay.setAttribute("aria-hidden","true");document.body.classList.remove("lightbox-open");}}
+      function makeEventCard(entry){const card=makeElement("article","info-card event-card");card.tabIndex=0;card.setAttribute("role","button");card.setAttribute("aria-label","View details for "+(entry.title||"event"));card.append(makeElement("span","event-tag",String(entry.category||"event").replace(/[-_]/g," ")));card.append(makeElement("h3","",entry.title||"Fanclub Event"));const date=entryDate(entry.event_date);if(date)card.append(makeElement("p","",date));const info=entry.venue||entry.thailand_time||entry.myanmar_time||plainText(entry.body);if(info)card.append(makeElement("p","event-short-info",info.length>100?info.slice(0,97)+"...":info));card.append(makeElement("span","section-label","VIEW DETAILS ↗"));card.addEventListener("click",()=>openEventDetails(entry));card.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();openEventDetails(entry);}});return card;}
+      function renderEvents(entries){const grid=document.getElementById("cms-events-grid");if(!grid)return;const upcoming=entries.filter(entry=>!eventIsPast(entry)).sort((a,b)=>eventTimestamp(a)-eventTimestamp(b)).slice(0,3);grid.replaceChildren();if(!upcoming.length){grid.append(makeElement("p","event-empty","No upcoming events have been announced. Please check the Events page for future updates."));return;}upcoming.forEach(entry=>grid.append(makeEventCard(entry)));}
+      const eventOverlay=document.getElementById("event-detail-overlay"), eventClose=document.getElementById("event-detail-close"); if(eventClose)eventClose.addEventListener("click",closeEventDetails); if(eventOverlay)eventOverlay.addEventListener("click",event=>{if(event.target===eventOverlay)closeEventDetails();}); document.addEventListener("keydown",event=>{if(event.key==="Escape"&&eventOverlay&&eventOverlay.classList.contains("is-open"))closeEventDetails();});
       function normalizeImagePath(path) {
         if (!path) return "";
         if (/^https?:\/\//i.test(path) || path.startsWith("/")) return path;
