@@ -1163,6 +1163,7 @@
               src="images/couple.jpg"
               alt="JanJingJing couple photograph"
               loading="lazy"
+              decoding="async"
             >
 
             <figcaption class="gallery-caption">
@@ -1181,6 +1182,7 @@
               src="images/back-view.jpg"
               alt="JanJingJing viewed from behind"
               loading="lazy"
+              decoding="async"
             >
 
             <figcaption class="gallery-caption">
@@ -1199,6 +1201,7 @@
               src="images/jingjing-portrait.jpg"
               alt="Jing Jing Yu portrait"
               loading="lazy"
+              decoding="async"
             >
 
             <figcaption class="gallery-caption">
@@ -1217,6 +1220,7 @@
               src="images/janhae-portrait.jpg"
               alt="Janhae portrait"
               loading="lazy"
+              decoding="async"
             >
 
             <figcaption class="gallery-caption">
@@ -1235,6 +1239,7 @@
               src="images/family-jewel.jpg"
               alt="Family Jewel photograph"
               loading="lazy"
+              decoding="async"
             >
 
             <figcaption class="gallery-caption">
@@ -1568,7 +1573,7 @@
         combined.slice(0,6).forEach(entry => {
           const figure=makeElement("figure","gallery-item"); figure.dataset.category=galleryCategory(entry);
           figure.tabIndex=0;figure.setAttribute("role","button");figure.setAttribute("aria-label","Open "+entry.title);
-          const image=document.createElement("img");image.src=normalizeImagePath(entry.image);image.alt=entry.alt_text||entry.title;image.loading="lazy";
+          const image=document.createElement("img");image.src=normalizeImagePath(entry.image);image.alt=entry.alt_text||entry.title;image.loading="lazy";image.decoding="async";
           figure.append(image);figure.append(makeElement("figcaption","gallery-caption",entry.caption||entry.title));galleryGrid.append(figure);bindGalleryItem(figure);
         }); refreshGalleryItems();
       }
