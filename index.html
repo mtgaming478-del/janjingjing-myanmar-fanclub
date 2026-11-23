@@ -1354,6 +1354,15 @@
       let currentIndex = 0;
       let lastFocusedElement = null;
 
+      function trapDialogFocus(dialog, event) {
+        if (event.key !== "Tab") return;
+        const focusable = Array.from(dialog.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter((element) => !element.hidden && element.getAttribute("aria-hidden") !== "true");
+        if (!focusable.length) { event.preventDefault(); return; }
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
+      }
+
       function showPhoto(index) {
         if (galleryItems.length === 0) return false;
         currentIndex = (index + galleryItems.length) % galleryItems.length;
@@ -1442,6 +1451,7 @@
       document.addEventListener("keydown", (event) => {
         if (!lightbox.classList.contains("is-open")) return;
         if (event.key === "Escape") closeLightbox();
+        if (event.key === "Tab") trapDialogFocus(lightbox, event);
         if (event.key === "ArrowLeft") showPhoto(currentIndex - 1);
         if (event.key === "ArrowRight") showPhoto(currentIndex + 1);
       });
@@ -1530,16 +1540,18 @@
       }
       function eventTimestamp(entry) { const n=Date.parse(String(entry.event_date||"").replace(" ","T")); return Number.isNaN(n)?Number.MAX_SAFE_INTEGER:n; }
       function eventIsPast(entry) { return entry.status==="past" || eventTimestamp(entry)<Date.now(); }
+      let lastEventDetailFocus = null;
       function openEventDetails(entry) {
+        lastEventDetailFocus = document.activeElement;
         const overlay=document.getElementById("event-detail-overlay"), title=document.getElementById("event-detail-title"), category=document.getElementById("event-detail-category"), meta=document.getElementById("event-detail-meta"), body=document.getElementById("event-detail-body"), source=document.getElementById("event-detail-source"); if(!overlay||!title||!category||!meta||!body||!source)return;
         title.textContent=entry.title||"Fanclub Event"; category.textContent=String(entry.category||"event").replace(/[-_]/g," ").toUpperCase(); meta.replaceChildren();
         [["Date",entryDate(entry.event_date)],["Thailand Time",entry.thailand_time],["Myanmar Time",entry.myanmar_time],["Venue / Platform",entry.venue],["Status",eventIsPast(entry)?"Past Event":"Upcoming Event"]].forEach(([label,value])=>{if(value)meta.append(makeElement("p","",label+": "+value));}); body.textContent=String(entry.body||"").trim(); source.replaceChildren();
         if(entry.source_url && /^https?:\/\//i.test(entry.source_url)){const a=makeElement("a","button button-primary","Official Source ↗");a.href=entry.source_url;a.target="_blank";a.rel="noopener noreferrer";source.append(a);} overlay.classList.add("is-open");overlay.setAttribute("aria-hidden","false");document.body.classList.add("lightbox-open");document.getElementById("event-detail-close")?.focus();
       }
-      function closeEventDetails(){const overlay=document.getElementById("event-detail-overlay");if(overlay){overlay.classList.remove("is-open");overlay.setAttribute("aria-hidden","true");document.body.classList.remove("lightbox-open");}}
+      function closeEventDetails(){const overlay=document.getElementById("event-detail-overlay");if(overlay){overlay.classList.remove("is-open");overlay.setAttribute("aria-hidden","true");document.body.classList.remove("lightbox-open");}if(lastEventDetailFocus&&typeof lastEventDetailFocus.focus==="function")lastEventDetailFocus.focus();}
       function makeEventCard(entry){const card=makeElement("article","info-card event-card");card.tabIndex=0;card.setAttribute("role","button");card.setAttribute("aria-label","View details for "+(entry.title||"event"));card.append(makeElement("span","event-tag",String(entry.category||"event").replace(/[-_]/g," ")));card.append(makeElement("h3","",entry.title||"Fanclub Event"));const date=entryDate(entry.event_date);if(date)card.append(makeElement("p","",date));const info=entry.venue||entry.thailand_time||entry.myanmar_time||plainText(entry.body);if(info)card.append(makeElement("p","event-short-info",info.length>100?info.slice(0,97)+"...":info));card.append(makeElement("span","section-label","VIEW DETAILS ↗"));card.addEventListener("click",()=>openEventDetails(entry));card.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();openEventDetails(entry);}});return card;}
       function renderEvents(entries){const grid=document.getElementById("cms-events-grid");if(!grid)return;const upcoming=entries.filter(entry=>!eventIsPast(entry)).sort((a,b)=>eventTimestamp(a)-eventTimestamp(b)).slice(0,3);grid.replaceChildren();if(!upcoming.length){grid.append(makeElement("p","event-empty","No upcoming events have been announced. Please check the Events page for future updates."));return;}upcoming.forEach(entry=>grid.append(makeEventCard(entry)));}
-      const eventOverlay=document.getElementById("event-detail-overlay"), eventClose=document.getElementById("event-detail-close"); if(eventClose)eventClose.addEventListener("click",closeEventDetails); if(eventOverlay)eventOverlay.addEventListener("click",event=>{if(event.target===eventOverlay)closeEventDetails();}); document.addEventListener("keydown",event=>{if(event.key==="Escape"&&eventOverlay&&eventOverlay.classList.contains("is-open"))closeEventDetails();});
+      const eventOverlay=document.getElementById("event-detail-overlay"), eventClose=document.getElementById("event-detail-close"); if(eventClose)eventClose.addEventListener("click",closeEventDetails); if(eventOverlay)eventOverlay.addEventListener("click",event=>{if(event.target===eventOverlay)closeEventDetails();}); document.addEventListener("keydown",event=>{if(!eventOverlay||!eventOverlay.classList.contains("is-open"))return;if(event.key==="Escape")closeEventDetails();if(event.key==="Tab")trapDialogFocus(eventOverlay,event);});
       function normalizeImagePath(path) {
         if (!path) return "";
         if (/^https?:\/\//i.test(path) || path.startsWith("/")) return path;
