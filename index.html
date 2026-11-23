@@ -197,8 +197,7 @@
     .hero-photo {
       position: relative;
       overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 22px;
+      border: 1px solid var(--border);      border-radius: 22px;
       background: var(--surface);
       box-shadow: 0 22px 65px rgba(0, 0, 0, 0.25);
     }
@@ -397,8 +396,7 @@
       color: var(--muted);
       cursor: pointer;
       font-size: 12px;
-      font-weight: 700;
-      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      font-weight: 700;      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     }
 
     .gallery-filter:hover,
@@ -598,7 +596,6 @@
       color: var(--muted);
       font-size: 12px;
     }
-
     .site-footer {
       padding: 30px 0;
       border-top: 1px solid var(--border);
@@ -797,8 +794,7 @@
       --bg: #F8F6F3;
       --surface: #FFFFFF;
       --surface-light: #F1EDF5;
-      --white: #292431;
-      --lavender: #8065A6;
+      --white: #292431;      --lavender: #8065A6;
       --pink: #A77F9D;
       --muted: #706B78;
       --border: rgba(65, 48, 83, 0.14);
@@ -997,7 +993,6 @@
         </div>
       </div>
     </section>
-
     <!-- News Section -->
     <section class="content-section" id="updates">
       <div class="container">
@@ -1116,8 +1111,8 @@
             <h2>Photo Gallery</h2>
 
             <p class="section-description">
-              A curated collection of Janhae, Jing Jing Yu
-              and JanJingJing moments. Select any photo
+              A curated collection of JJJJ, JanJingJing, Janhae,
+              JingJingYu, Jewel and Fanclub moments. Select any photo
               to open the gallery viewer.
             </p>
           </div>
@@ -1125,16 +1120,18 @@
 
         <div class="gallery-filters" role="group" aria-label="Filter gallery by category">
           <button class="gallery-filter is-active" type="button" data-gallery-filter="all" aria-pressed="true">All Photos</button>
-          <button class="gallery-filter" type="button" data-gallery-filter="official" aria-pressed="false">Official Photos</button>
-          <button class="gallery-filter" type="button" data-gallery-filter="events" aria-pressed="false">Events</button>
-          <button class="gallery-filter" type="button" data-gallery-filter="fanclub" aria-pressed="false">Fanclub Projects</button>
-          <button class="gallery-filter" type="button" data-gallery-filter="media" aria-pressed="false">Media &amp; Behind the Scenes</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="jjjj" aria-pressed="false">JJJJ</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="janjingjing" aria-pressed="false">JanJingJing</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="janhae" aria-pressed="false">Janhae</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="jingjingyu" aria-pressed="false">JingJingYu</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="jewel" aria-pressed="false">Jewel</button>
+          <button class="gallery-filter" type="button" data-gallery-filter="fanclub" aria-pressed="false">Fanclub</button>
         </div>
 
         <div class="gallery-grid">
           <figure
             class="gallery-item wide"
-            data-category="official"
+            data-category="janhae"
             tabindex="0"
             role="button"
             aria-label="Open JanJingJing photo"
@@ -1152,7 +1149,7 @@
 
           <figure
             class="gallery-item wide"
-            data-category="media"
+            data-category="jingjingyu"
             tabindex="0"
             role="button"
             aria-label="Open Behind the Moments photo"
@@ -1198,7 +1195,6 @@
               alt="Janhae portrait"
               loading="lazy"
             >
-
             <figcaption class="gallery-caption">
               Janhae
             </figcaption>
@@ -1397,8 +1393,7 @@
         button.addEventListener("click", () => {
           const category = button.dataset.galleryFilter;
           filterButtons.forEach((filterButton) => {
-            const isActive = filterButton === button;
-            filterButton.classList.toggle("is-active", isActive);
+            const isActive = filterButton === button;            filterButton.classList.toggle("is-active", isActive);
             filterButton.setAttribute("aria-pressed", String(isActive));
           });
 
@@ -1522,12 +1517,23 @@
       }
 
       const staticGalleryEntries = [
-        { title: "JanJingJing", image: "images/couple.jpg", category: "official", caption: "JanJingJing", alt_text: "JanJingJing couple photograph" },
-        { title: "Behind the Moments", image: "images/back-view.jpg", category: "media", caption: "Behind the Moments", alt_text: "JanJingJing viewed from behind" },
-        { title: "Jing Jing Yu", image: "images/jingjing-portrait.jpg", category: "official", caption: "Jing Jing Yu", alt_text: "Jing Jing Yu portrait" },
-        { title: "Janhae", image: "images/janhae-portrait.jpg", category: "official", caption: "Janhae", alt_text: "Janhae portrait" },
+        { title: "JanJingJing", image: "images/couple.jpg", category: "jjjj", caption: "JanJingJing", alt_text: "JanJingJing couple photograph" },
+        { title: "Behind the Moments", image: "images/back-view.jpg", category: "jjjj", caption: "Behind the Moments", alt_text: "JanJingJing viewed from behind" },
+        { title: "Jing Jing Yu", image: "images/jingjing-portrait.jpg", category: "jingjingyu", caption: "Jing Jing Yu", alt_text: "Jing Jing Yu portrait" },
+        { title: "Janhae", image: "images/janhae-portrait.jpg", category: "janhae", caption: "Janhae", alt_text: "Janhae portrait" },
         { title: "Family Jewel", image: "images/family-jewel.jpg", category: "fanclub", caption: "Family Jewel", alt_text: "Family Jewel photograph" }
       ];
+      function galleryCategory(entry) {
+        const raw = String(entry.category || "").toLowerCase();
+        if (["jjjj", "janjingjing", "janhae", "jingjingyu", "jewel", "fanclub"].includes(raw)) return raw;
+        const hint = [entry.title, entry.caption, entry.alt_text].join(" ").toLowerCase();
+        if (hint.includes("janhae")) return "janhae";
+        if (hint.includes("jing jing yu") || hint.includes("jingjingyu")) return "jingjingyu";
+        if (hint.includes("jewel")) return "jewel";
+        if (hint.includes("fanclub") || hint.includes("fan club")) return "fanclub";
+        return "jjjj";
+      }
+
       function renderCmsGallery(entries) {
         if (!galleryGrid) return;
         const cmsEntries = entries.filter(entry => entry.image && entry.title).map(entry => ({...entry,_cms:true,_sortDate:String(entry.date||"").slice(0,10)}));
@@ -1535,7 +1541,7 @@
         const combined = cmsEntries.concat(staticEntries).sort((a,b) => String(b._sortDate||"").localeCompare(String(a._sortDate||"")) || (a._cms===b._cms?0:a._cms?-1:1));
         galleryGrid.replaceChildren();
         combined.slice(0,6).forEach(entry => {
-          const figure=makeElement("figure","gallery-item"); figure.dataset.category=["official","events","fanclub","media"].includes(entry.category)?entry.category:"official";
+          const figure=makeElement("figure","gallery-item"); figure.dataset.category=galleryCategory(entry);
           figure.tabIndex=0;figure.setAttribute("role","button");figure.setAttribute("aria-label","Open "+entry.title);
           const image=document.createElement("img");image.src=normalizeImagePath(entry.image);image.alt=entry.alt_text||entry.title;image.loading="lazy";
           figure.append(image);figure.append(makeElement("figcaption","gallery-caption",entry.caption||entry.title));galleryGrid.append(figure);bindGalleryItem(figure);
