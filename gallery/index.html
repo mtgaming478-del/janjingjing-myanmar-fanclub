@@ -35,10 +35,10 @@ footer{border-top-color:rgba(65,48,83,.12);color:#716A78}footer .footer-inner a{
 <a class="brand" href="/">JanJingJing Myanmar Fanclub</a>
 <div class="nav-links"><a href="/">Home</a><a href="/about/">About</a><a href="/#updates">News</a><a href="/events/">Events</a><a href="/gallery/" aria-current="page">Gallery</a><a href="/#social">Social</a></div>
 </nav></header>
-<main><section class="hero"><div class="container"><p class="eyebrow">Through Our Lens</p><h1>Photo Gallery</h1><p>Explore JanJingJing moments, artist photographs, event memories and fanclub projects. Select any photo to open the gallery viewer.</p></div></section>
+<main><section class="hero"><div class="container"><p class="eyebrow">Through Our Lens</p><h1>Photo Gallery</h1><p>Explore photos of JJJJ, JanJingJing, Janhae, JingJingYu, Jewel and our Fanclub community. Select any photo to open the gallery viewer.</p></div></section>
 <section class="section"><div class="container">
 <div class="toolbar"><div class="filters" role="group" aria-label="Filter gallery photos">
-<button class="filter active" type="button" data-category="all" aria-pressed="true">All Photos</button><button class="filter" type="button" data-category="official" aria-pressed="false">Official Photos</button><button class="filter" type="button" data-category="events" aria-pressed="false">Events</button><button class="filter" type="button" data-category="fanclub" aria-pressed="false">Fanclub Projects</button><button class="filter" type="button" data-category="media" aria-pressed="false">Media &amp; Behind the Scenes</button>
+<button class="filter active" type="button" data-category="all" aria-pressed="true">All Photos</button><button class="filter" type="button" data-category="jjjj" aria-pressed="false">JJJJ</button><button class="filter" type="button" data-category="janjingjing" aria-pressed="false">JanJingJing</button><button class="filter" type="button" data-category="janhae" aria-pressed="false">Janhae</button><button class="filter" type="button" data-category="jingjingyu" aria-pressed="false">JingJingYu</button><button class="filter" type="button" data-category="jewel" aria-pressed="false">Jewel</button><button class="filter" type="button" data-category="fanclub" aria-pressed="false">Fanclub</button>
 </div><p class="count" id="photo-count" aria-live="polite">Loading photos…</p></div>
 <div class="grid" id="photo-grid"><p class="empty">Loading photos…</p></div>
 </div></section></main>
@@ -51,10 +51,10 @@ footer{border-top-color:rgba(65,48,83,.12);color:#716A78}footer .footer-inner a{
 (() => {
 const REPO="mtgaming478-del/janjingjing-myanmar-fanclub",BRANCH="main";
 const seeds=[
-{title:"JanJingJing",image:"images/couple.jpg",category:"official",caption:"JanJingJing",alt_text:"JanJingJing couple photograph"},
-{title:"Behind the Moments",image:"images/back-view.jpg",category:"media",caption:"Behind the Moments",alt_text:"JanJingJing viewed from behind"},
-{title:"Jing Jing Yu",image:"images/jingjing-portrait.jpg",category:"official",caption:"Jing Jing Yu",alt_text:"Jing Jing Yu portrait"},
-{title:"Janhae",image:"images/janhae-portrait.jpg",category:"official",caption:"Janhae",alt_text:"Janhae portrait"},
+{title:"JanJingJing",image:"images/couple.jpg",category:"janjingjing",caption:"JanJingJing",alt_text:"JanJingJing couple photograph"},
+{title:"Behind the Moments",image:"images/back-view.jpg",category:"jjjj",caption:"Behind the Moments",alt_text:"JanJingJing viewed from behind"},
+{title:"Jing Jing Yu",image:"images/jingjing-portrait.jpg",category:"jingjingyu",caption:"Jing Jing Yu",alt_text:"Jing Jing Yu portrait"},
+{title:"Janhae",image:"images/janhae-portrait.jpg",category:"janhae",caption:"Janhae",alt_text:"Janhae portrait"},
 {title:"Family Jewel",image:"images/family-jewel.jpg",category:"fanclub",caption:"Family Jewel",alt_text:"Family Jewel photograph"}
 ];
 const grid=document.getElementById("photo-grid"),count=document.getElementById("photo-count"),filters=[...document.querySelectorAll("[data-category]")],viewer=document.getElementById("photo-viewer");
@@ -63,6 +63,7 @@ document.getElementById("year").textContent=new Date().getFullYear();
 function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
 function parse(md){const m=md.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);if(!m)return{};const x={};m[1].split(/\r?\n/).forEach(line=>{const f=line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);if(f){let v=f[2].trim();if((v.startsWith('"')&&v.endsWith('"'))||(v.startsWith("'")&&v.endsWith("'")))v=v.slice(1,-1);x[f[1]]=v;}});x.body=m[2].trim();return x;}
 function normalize(path){if(!path)return"";if(/^https?:\/\//i.test(path)||path.startsWith("/"))return path;return"/"+path.replace(/^\.\//,"");}
+function galleryCategory(p){const raw=String(p.category||"").toLowerCase();if(["jjjj","janjingjing","janhae","jingjingyu","jewel","fanclub"].includes(raw))return raw;const hint=[p.title,p.caption,p.alt_text].join(" ").toLowerCase();if(hint.includes("janhae"))return"janhae";if(hint.includes("jing jing yu")||hint.includes("jingjingyu"))return"jingjingyu";if(hint.includes("jewel"))return"jewel";if(hint.includes("fanclub")||hint.includes("fan club"))return"fanclub";return"jjjj";}
 function stamp(p){const n=Date.parse(String(p.date||"").replace(" ","T"));return Number.isNaN(n)?0:n;}
 function render(){visible=photos.filter(p=>category==="all"||p.category===category);grid.replaceChildren();count.textContent=visible.length+" "+(visible.length===1?"photo":"photos");if(!visible.length){grid.append(el("p","empty","No photos are available in this category yet."));return;}visible.forEach((p,i)=>{const figure=el("figure","photo");figure.tabIndex=0;figure.setAttribute("role","button");figure.setAttribute("aria-label","Open "+p.title);if(i===0&&p.featured)figure.classList.add("wide");figure.dataset.category=p.category;const img=document.createElement("img");img.src=normalize(p.image);img.alt=p.alt_text||p.title;img.loading="lazy";figure.append(img,el("figcaption","caption",p.caption||p.title));figure.addEventListener("click",()=>open(i));figure.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open(i);}});grid.append(figure);});}
 function show(i){if(!visible.length)return;current=(i+visible.length)%visible.length;const p=visible[current],img=document.getElementById("viewer-image");img.src=normalize(p.image);img.alt=p.alt_text||p.title;document.getElementById("viewer-caption").textContent=p.caption||p.title;document.getElementById("viewer-counter").textContent=(current+1)+" / "+visible.length;}
@@ -71,7 +72,7 @@ function close(){viewer.classList.remove("open");viewer.setAttribute("aria-hidde
 filters.forEach(btn=>btn.addEventListener("click",()=>{category=btn.dataset.category;filters.forEach(f=>{const active=f===btn;f.classList.toggle("active",active);f.setAttribute("aria-pressed",String(active));});render();}));
 document.getElementById("viewer-close").addEventListener("click",close);document.getElementById("viewer-prev").addEventListener("click",()=>show(current-1));document.getElementById("viewer-next").addEventListener("click",()=>show(current+1));viewer.addEventListener("click",e=>{if(e.target===viewer)close();});document.addEventListener("keydown",e=>{if(!viewer.classList.contains("open"))return;if(e.key==="Escape")close();if(e.key==="ArrowLeft")show(current-1);if(e.key==="ArrowRight")show(current+1);});
 async function load(){let cms=[];try{const r=await fetch("https://api.github.com/repos/"+REPO+"/contents/content/gallery?ref="+BRANCH,{headers:{Accept:"application/vnd.github+json"}});if(r.ok){const files=await r.json();const md=Array.isArray(files)?files.filter(f=>f.type==="file"&&/\.md$/i.test(f.name)):[];cms=(await Promise.all(md.map(async f=>{const x=await fetch(f.download_url);if(!x.ok)return null;return parse(await x.text());}))).filter(p=>p&&p.image&&p.title);}}catch(e){}
-const seen=new Set();photos=cms.map(p=>({...p,image:normalize(p.image),_cms:true})).concat(seeds.map(p=>({...p,_cms:false}))).filter(p=>{const key=normalize(p.image);if(seen.has(key))return false;seen.add(key);return true;}).sort((a,b)=>stamp(b)-stamp(a));render();}
+const seen=new Set();photos=cms.map(p=>({...p,category:galleryCategory(p),image:normalize(p.image),_cms:true})).concat(seeds.map(p=>({...p,_cms:false}))).filter(p=>{const key=normalize(p.image);if(seen.has(key))return false;seen.add(key);return true;}).sort((a,b)=>stamp(b)-stamp(a));render();}
 load();
 })();
 </script>

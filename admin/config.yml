@@ -66,7 +66,7 @@ collections:
     fields:
       - { label: Photo Title, name: title, widget: string }
       - { label: Image, name: image, widget: image }
-      - { label: Category, name: category, widget: select, options: [official, events, fanclub, media] }
+      - { label: Category, name: category, widget: select, options: [{ label: "JJJJ", value: "jjjj" }, { label: "JanJingJing", value: "janjingjing" }, { label: "Janhae", value: "janhae" }, { label: "JingJingYu", value: "jingjingyu" }, { label: "Jewel", value: "jewel" }, { label: "Fanclub", value: "fanclub" }] }
       - { label: Caption, name: caption, widget: string, required: false }
       - { label: Alt Text, name: alt_text, widget: string }
       - { label: Date, name: date, widget: datetime, required: false, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
