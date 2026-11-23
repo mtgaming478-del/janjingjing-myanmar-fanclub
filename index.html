@@ -599,6 +599,43 @@
       font-size: 12px;
     }
 
+    /* Emergency Contact — classified-style reveal panel */
+    .emergency-card{width:100%;text-align:left;font:inherit;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#211e28,#30263a);border-color:rgba(220,204,251,.32)}
+    .emergency-card::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 20%,rgba(220,204,251,.08) 48%,transparent 72%);transform:translateX(-110%);transition:transform .65s ease;pointer-events:none}
+    .emergency-card:hover::after,.emergency-card:focus-visible::after{transform:translateX(110%)}
+    .emergency-card:hover,.emergency-card:focus-visible{background:linear-gradient(135deg,#292333,#3a2d47);border-color:#DCCCFB}
+    .emergency-card:focus-visible{outline:2px solid #DCCCFB;outline-offset:3px}
+    .emergency-card strong{color:#fff}
+    .emergency-card .emergency-card-top{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+    .emergency-lock{display:grid;place-items:center;width:27px;height:27px;border:1px solid rgba(220,204,251,.45);border-radius:8px;color:#DCCCFB;font-size:19px;line-height:1}
+    .emergency-status{color:#DCCCFB!important;font-size:9px!important;font-weight:800;letter-spacing:.16em}
+    .emergency-card .social-visit{color:#DCCCFB}
+    .emergency-overlay{position:fixed;inset:0;z-index:1300;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(8,7,12,.88);backdrop-filter:blur(12px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .24s ease,visibility .24s ease}
+    .emergency-overlay.is-open{opacity:1;visibility:visible;pointer-events:auto}
+    .emergency-dialog{position:relative;width:min(480px,100%);max-height:min(88vh,760px);overflow:auto;padding:26px;border:1px solid rgba(220,204,251,.34);border-radius:22px;background:radial-gradient(ellipse at 50% 0,rgba(128,101,166,.2),transparent 48%),#1b1822;color:#fff;box-shadow:0 28px 90px rgba(0,0,0,.55)}
+    .emergency-dialog:focus{outline:none}
+    .emergency-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .emergency-file-label{display:flex;align-items:center;gap:8px;color:#DCCCFB;font-size:9px;font-weight:800;letter-spacing:.15em}
+    .emergency-live-dot{width:7px;height:7px;border-radius:50%;background:#E9A5B8;box-shadow:0 0 12px rgba(233,165,184,.8)}
+    .emergency-close{display:grid;place-items:center;width:36px;height:36px;border:1px solid rgba(220,204,251,.24);border-radius:50%;background:rgba(255,255,255,.05);color:#fff;font-size:23px;line-height:1;cursor:pointer}
+    .emergency-close:hover,.emergency-close:focus-visible{background:rgba(220,204,251,.16);outline:2px solid #DCCCFB;outline-offset:2px}
+    .emergency-seal{display:grid;place-items:center;width:52px;height:52px;margin:24px auto 12px;border:1px solid rgba(220,204,251,.42);border-radius:16px;background:rgba(220,204,251,.08);color:#DCCCFB;font-size:24px;box-shadow:0 0 28px rgba(128,101,166,.18)}
+    .emergency-kicker{text-align:center;color:#C5B3E5;font-size:9px;font-weight:800;letter-spacing:.16em}
+    .emergency-dialog h2{margin:7px 0 6px;text-align:center;color:#fff;font-size:29px;letter-spacing:-.03em}
+    .emergency-description{max-width:340px;margin:0 auto;color:#B9B2C3;text-align:center;font-size:12px;line-height:1.65}
+    .emergency-divider{display:flex;align-items:center;gap:12px;margin:24px 0 10px;color:#94899F;font-size:9px;font-weight:800;letter-spacing:.15em}
+    .emergency-divider::before,.emergency-divider::after{content:"";height:1px;flex:1;background:rgba(220,204,251,.18)}
+    .emergency-contact-row{display:flex;align-items:center;gap:12px;min-height:58px;margin-top:8px;padding:10px 12px;border:1px solid rgba(220,204,251,.13);border-radius:13px;background:rgba(255,255,255,.035);color:#fff;transition:border-color .18s ease,background .18s ease}
+    a.emergency-contact-row:hover,a.emergency-contact-row:focus-visible{border-color:rgba(220,204,251,.55);background:rgba(220,204,251,.09);outline:none}
+    .emergency-channel-icon{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border:1px solid rgba(220,204,251,.22);border-radius:10px;color:#DCCCFB;font-size:10px;font-weight:800;letter-spacing:.04em}
+    .emergency-channel-copy{display:grid;gap:1px;min-width:0}
+    .emergency-channel-copy strong{font-size:12px}
+    .emergency-channel-copy small{color:#B9B2C3;font-size:11px}
+    .emergency-arrow{margin-left:auto;color:#DCCCFB;font-size:16px}
+    .emergency-footnote{margin-top:18px;color:#8F849A;text-align:center;font-size:8px;font-weight:700;letter-spacing:.09em;line-height:1.6}
+    body.emergency-open{overflow:hidden}
+    @media(max-width:760px){.emergency-overlay{padding:12px}.emergency-dialog{padding:21px 17px;border-radius:18px}.emergency-dialog h2{font-size:26px}.emergency-card{min-height:128px}}
+
     .site-footer {
       padding: 30px 0;
       border-top: 1px solid var(--border);
@@ -951,6 +988,15 @@
     }
     @media(prefers-reduced-motion:reduce){.mobile-menu-toggle span{transition:none}}
 
+
+    /* Keep the classified card distinct from the light social-card theme */
+    .social-card.emergency-card{background:linear-gradient(135deg,#211e28,#30263a);border-color:rgba(128,101,166,.42)}
+    .social-card.emergency-card strong{color:#fff}
+    .social-card.emergency-card span{color:#C7BDD2}
+    .social-card.emergency-card .emergency-status{color:#DCCCFB}
+    .social-card.emergency-card .social-visit{color:#DCCCFB}
+    .social-card.emergency-card:hover,.social-card.emergency-card:focus-visible{background:linear-gradient(135deg,#292333,#3a2d47);border-color:#8065A6}
+
   </style>
 </head>
 
@@ -992,8 +1038,8 @@
           </p>
 
           <div class="actions">
-            <a class="button button-primary" href="#updates">
-              Explore Updates ↗
+            <a class="button button-primary" href="/events/">
+              Explore Events ↗
             </a>
 
             <a class="button button-secondary" href="#gallery">
@@ -1312,11 +1358,17 @@
             <span>Latest updates &amp; announcements</span>
             <span class="social-visit">JOIN CHANNEL ↗</span>
           </a>
-          <a class="social-card" href="https://t.me/JanJingJingMMFC_bot" target="_blank" rel="noopener noreferrer" aria-label="Contact JanJingJing Myanmar Fanclub Support Chat on Telegram">
+          <a class="social-card" href="https://t.me/MMFCGA2" target="_blank" rel="noopener noreferrer" aria-label="Contact JanJingJing Myanmar Fanclub Support Chat on Telegram">
             <strong>Contact Support Chat</strong>
             <span>Questions, feedback &amp; assistance</span>
             <span class="social-visit">CHAT WITH US ↗</span>
           </a>
+          <button class="social-card emergency-card" id="emergency-open" type="button" aria-haspopup="dialog" aria-controls="emergency-panel">
+            <span class="emergency-card-top"><span class="emergency-lock" aria-hidden="true">⌑</span><span class="emergency-status">RESTRICTED ACCESS</span></span>
+            <strong>Emergency Contact</strong>
+            <span>Confidential contact channel for urgent matters</span>
+            <span class="social-visit">UNLOCK CONTACT FILE <span aria-hidden="true">↗</span></span>
+          </button>
         </div>
         <p class="social-note">
           Follow our official platforms for updates, and contact our support chat if you need assistance.
@@ -1325,12 +1377,83 @@
     </section>
   </main>
 
+  <div class="emergency-overlay" id="emergency-panel" aria-hidden="true">
+    <section class="emergency-dialog" role="dialog" aria-modal="true" aria-labelledby="emergency-title" aria-describedby="emergency-description" tabindex="-1">
+      <div class="emergency-dialog-top">
+        <span class="emergency-file-label"><span class="emergency-live-dot"></span> EMERGENCY CONTACT FILE</span>
+        <button class="emergency-close" id="emergency-close" type="button" aria-label="Close emergency contact panel">&times;</button>
+      </div>
+      <div class="emergency-seal" aria-hidden="true">✦</div>
+      <p class="emergency-kicker">IDENTITY VERIFIED · PERSONAL CONTACT</p>
+      <h2 id="emergency-title">Min Thu Rain</h2>
+      <p id="emergency-description" class="emergency-description">For urgent matters requiring direct contact, use one of the channels below.</p>
+      <div class="emergency-divider"><span>DIRECT CHANNELS</span></div>
+      <a class="emergency-contact-row" href="https://t.me/minthurain889" target="_blank" rel="noopener noreferrer">
+        <span class="emergency-channel-icon">TG</span><span class="emergency-channel-copy"><strong>Telegram</strong><small>@minthurain889</small></span><span class="emergency-arrow">↗</span>
+      </a>
+      <a class="emergency-contact-row" href="https://wa.me/959797400634" target="_blank" rel="noopener noreferrer">
+        <span class="emergency-channel-icon">WA</span><span class="emergency-channel-copy"><strong>WhatsApp</strong><small>09797400634</small></span><span class="emergency-arrow">↗</span>
+      </a>
+      <div class="emergency-contact-row emergency-contact-static">
+        <span class="emergency-channel-icon">WC</span><span class="emergency-channel-copy"><strong>WeChat</strong><small>09797400634</small></span><span class="emergency-arrow">·</span>
+      </div>
+      <a class="emergency-contact-row" href="viber://chat?number=%2B959797400634">
+        <span class="emergency-channel-icon">VB</span><span class="emergency-channel-copy"><strong>Viber</strong><small>09797400634</small></span><span class="emergency-arrow">↗</span>
+      </a>
+      <a class="emergency-contact-row" href="tel:+959797400634">
+        <span class="emergency-channel-icon">PH</span><span class="emergency-channel-copy"><strong>Phone</strong><small>09797400634</small></span><span class="emergency-arrow">↗</span>
+      </a>
+      <p class="emergency-footnote">PLEASE USE THESE DETAILS FOR GENUINE URGENT COMMUNICATION ONLY.</p>
+    </section>
+  </div>
+
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>&copy; <span id="current-year"></span> JanJingJing Myanmar Fanclub. Made with love by fans.</p>
       <a href="#home">Back to top ↑</a>
     </div>
   </footer>
+
+  <script>
+    (() => {
+      const trigger = document.getElementById("emergency-open");
+      const overlay = document.getElementById("emergency-panel");
+      const dialog = overlay && overlay.querySelector(".emergency-dialog");
+      const close = document.getElementById("emergency-close");
+      if (!trigger || !overlay || !dialog || !close) return;
+      let previousFocus = null;
+      const focusableSelector = 'a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])';
+      function openPanel() {
+        previousFocus = document.activeElement;
+        overlay.classList.add("is-open");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("emergency-open");
+        close.focus();
+      }
+      function closePanel() {
+        overlay.classList.remove("is-open");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("emergency-open");
+        if (previousFocus && previousFocus.focus) previousFocus.focus();
+      }
+      trigger.addEventListener("click", openPanel);
+      close.addEventListener("click", closePanel);
+      overlay.addEventListener("click", event => { if (event.target === overlay) closePanel(); });
+      document.addEventListener("keydown", event => {
+        if (!overlay.classList.contains("is-open")) return;
+        if (event.key === "Escape") { event.preventDefault(); closePanel(); return; }
+        if (event.key !== "Tab") return;
+        const items = [...dialog.querySelectorAll(focusableSelector)].filter(item => !item.hidden);
+        if (!items.length) { event.preventDefault(); return; }
+        const first = items[0], last = items[items.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+          event.preventDefault(); last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+          event.preventDefault(); first.focus();
+        }
+      });
+    })();
+  </script>
 
   <script>
     (() => {
