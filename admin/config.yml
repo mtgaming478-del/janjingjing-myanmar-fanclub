@@ -2,9 +2,10 @@ backend:
   name: turbo-github
   turbo_site_id: 8d2e6e95-0f5e-4ffe-b697-41c49ad177b8
   branch: main
+  squash_merges: true
 
 site_url: https://janjingjing-myanmar-fanclub.wasmer.app
-publish_mode: simple
+publish_mode: editorial_workflow
 
 media_folder: images/uploads
 public_folder: /images/uploads
