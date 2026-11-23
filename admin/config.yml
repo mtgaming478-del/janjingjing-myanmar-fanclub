@@ -87,7 +87,7 @@ collections:
     folder: content/activities
     create: true
     delete: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
     summary: "{{title}} — {{category}}"
     sortable_fields:
       - date
