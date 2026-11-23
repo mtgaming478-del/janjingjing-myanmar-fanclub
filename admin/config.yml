@@ -80,3 +80,36 @@ collections:
       - { label: Alt Text, name: alt_text, widget: string }
       - { label: Date, name: date, widget: datetime, required: false, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - { label: Original Source URL, name: source_url, widget: string, required: false }
+
+  - name: activities
+    label: Artist Activities
+    label_singular: Artist Activity
+    folder: content/activities
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    summary: "{{title}} — {{category}}"
+    sortable_fields:
+      - date
+      - title
+    fields:
+      - { label: Activity Title, name: title, widget: string }
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - { label: "JanJingJing", value: "JanJingJing" }
+          - { label: "Janhae", value: "Janhae" }
+          - { label: "JingJingYu", value: "JingJingYu" }
+          - { label: "Jewel", value: "Jewel" }
+          - { label: "JJJJ", value: "JJJJ" }
+      - { label: Activity Type, name: activity_type, widget: select, options: ["Series", "Film", "Music Video", "Single", "OST", "Fancon", "Appearance", "Mascot", "Special Project"] }
+      - { label: Date, name: date, widget: datetime, required: false, format: "YYYY-MM-DD HH:mm", date_format: "YYYY-MM-DD", time_format: "HH:mm" }
+      - { label: Featured Artists / Participants, name: people, widget: string, required: false }
+      - { label: Character / Role, name: roles, widget: string, required: false }
+      - { label: Short Summary, name: summary, widget: text }
+      - { label: Activity Details, name: body, widget: markdown }
+      - { label: Official Source URL, name: source_url, widget: string, required: false }
+      - { label: Official Video URL, name: video_url, widget: string, required: false }
+      - { label: Cover Image, name: image, widget: image, required: false }
+      - { label: Verified, name: verified, widget: boolean, default: false }
