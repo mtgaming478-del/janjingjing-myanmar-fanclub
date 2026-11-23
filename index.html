@@ -933,6 +933,24 @@
       .nav-links { gap: 10px 17px; }
     }
 
+  
+    /* UX Improvement 01 — accessible responsive mobile navigation */
+    .mobile-menu-toggle{display:none;align-items:center;justify-content:center;gap:5px;width:44px;height:44px;flex:0 0 44px;padding:10px;border:1px solid rgba(65,48,83,.18);border-radius:12px;background:#fff;color:#30283A;cursor:pointer}
+    .mobile-menu-toggle span{display:block;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform .18s ease,opacity .18s ease}
+    .mobile-menu-toggle:focus-visible{outline:2px solid #8065A6;outline-offset:3px}
+    .mobile-menu-toggle[aria-expanded="true"] span:first-child{transform:translateY(7px) rotate(45deg)}
+    .mobile-menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+    .mobile-menu-toggle[aria-expanded="true"] span:last-child{transform:translateY(-7px) rotate(-45deg)}
+    @media(max-width:760px){
+      .nav,.nav-inner{position:relative;align-items:center!important;justify-content:space-between!important;flex-direction:row!important;flex-wrap:wrap;gap:12px}
+      .mobile-menu-toggle{display:inline-flex}
+      .nav-links,.links{display:none!important;order:3;width:100%;flex-direction:column;align-items:stretch;gap:0!important;padding:8px;border:1px solid rgba(65,48,83,.14);border-radius:14px;background:#fff;box-shadow:0 12px 28px rgba(52,39,68,.08)}
+      .nav.is-menu-open .nav-links,.nav.is-menu-open .links,.nav-inner.is-menu-open .nav-links,.nav-inner.is-menu-open .links{display:flex!important}
+      .nav-links a,.links a{display:flex;align-items:center;min-height:44px;width:100%;padding:10px 12px;border-radius:9px;font-size:14px!important}
+      .nav-links a:hover,.links a:hover,.nav-links a:focus-visible,.links a:focus-visible,.nav-links a[aria-current="page"],.links a[aria-current="page"]{background:#F1EDF5}
+    }
+    @media(prefers-reduced-motion:reduce){.mobile-menu-toggle span{transition:none}}
+
   </style>
 </head>
 
@@ -941,9 +959,9 @@
     <nav class="nav container" aria-label="Main navigation">
       <a class="brand" href="#home">
         JanJingJing Myanmar Fanclub
-      </a>
+      </a><button class="mobile-menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav-links"><span></span><span></span><span></span></button>
 
-      <div class="nav-links">
+      <div id="mobile-nav-links" class="nav-links">
         <a href="#home">Home</a>
         <a href="/about/">About</a>
       <a href="/news/">News</a>
@@ -1571,5 +1589,45 @@
       if (year) year.textContent = new Date().getFullYear();
     })();
   </script>
+
+<script>
+(() => {
+  document.querySelectorAll(".nav, .nav-inner").forEach((navigation) => {
+    const toggle = navigation.querySelector(".mobile-menu-toggle");
+    const links = navigation.querySelector(".nav-links, .links");
+    if (!toggle || !links) return;
+    const closeMenu = (returnFocus = false) => {
+      navigation.classList.remove("is-menu-open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open navigation menu");
+      if (returnFocus) toggle.focus();
+    };
+    toggle.addEventListener("click", () => {
+      if (toggle.getAttribute("aria-expanded") === "true") closeMenu();
+      else {
+        navigation.classList.add("is-menu-open");
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.setAttribute("aria-label", "Close navigation menu");
+      }
+    });
+    links.addEventListener("click", (event) => {
+      if (event.target.closest("a")) closeMenu();
+    });
+    navigation.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        event.preventDefault();
+        closeMenu(true);
+      }
+    });
+    document.addEventListener("click", (event) => {
+      if (!navigation.contains(event.target)) closeMenu();
+    });
+    window.addEventListener("resize", () => {
+      if (window.matchMedia("(min-width: 761px)").matches) closeMenu();
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
