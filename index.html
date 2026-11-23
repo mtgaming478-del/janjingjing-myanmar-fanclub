@@ -197,7 +197,8 @@
     .hero-photo {
       position: relative;
       overflow: hidden;
-      border: 1px solid var(--border);      border-radius: 22px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
       background: var(--surface);
       box-shadow: 0 22px 65px rgba(0, 0, 0, 0.25);
     }
@@ -396,7 +397,8 @@
       color: var(--muted);
       cursor: pointer;
       font-size: 12px;
-      font-weight: 700;      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      font-weight: 700;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     }
 
     .gallery-filter:hover,
@@ -596,6 +598,7 @@
       color: var(--muted);
       font-size: 12px;
     }
+
     .site-footer {
       padding: 30px 0;
       border-top: 1px solid var(--border);
@@ -794,7 +797,8 @@
       --bg: #F8F6F3;
       --surface: #FFFFFF;
       --surface-light: #F1EDF5;
-      --white: #292431;      --lavender: #8065A6;
+      --white: #292431;
+      --lavender: #8065A6;
       --pink: #A77F9D;
       --muted: #706B78;
       --border: rgba(65, 48, 83, 0.14);
@@ -993,6 +997,7 @@
         </div>
       </div>
     </section>
+
     <!-- News Section -->
     <section class="content-section" id="updates">
       <div class="container">
@@ -1195,6 +1200,7 @@
               alt="Janhae portrait"
               loading="lazy"
             >
+
             <figcaption class="gallery-caption">
               Janhae
             </figcaption>
@@ -1393,7 +1399,8 @@
         button.addEventListener("click", () => {
           const category = button.dataset.galleryFilter;
           filterButtons.forEach((filterButton) => {
-            const isActive = filterButton === button;            filterButton.classList.toggle("is-active", isActive);
+            const isActive = filterButton === button;
+            filterButton.classList.toggle("is-active", isActive);
             filterButton.setAttribute("aria-pressed", String(isActive));
           });
 
@@ -1517,7 +1524,7 @@
       }
 
       const staticGalleryEntries = [
-        { title: "JanJingJing", image: "images/couple.jpg", category: "jjjj", caption: "JanJingJing", alt_text: "JanJingJing couple photograph" },
+        { title: "JanJingJing", image: "images/couple.jpg", category: "janjingjing", caption: "JanJingJing", alt_text: "JanJingJing couple photograph" },
         { title: "Behind the Moments", image: "images/back-view.jpg", category: "jjjj", caption: "Behind the Moments", alt_text: "JanJingJing viewed from behind" },
         { title: "Jing Jing Yu", image: "images/jingjing-portrait.jpg", category: "jingjingyu", caption: "Jing Jing Yu", alt_text: "Jing Jing Yu portrait" },
         { title: "Janhae", image: "images/janhae-portrait.jpg", category: "janhae", caption: "Janhae", alt_text: "Janhae portrait" },
