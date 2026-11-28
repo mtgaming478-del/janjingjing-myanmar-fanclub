@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://janjingjing-myanmar-fanclub.wasmer.app/sitemap.xml
